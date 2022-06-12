@@ -29,6 +29,7 @@ export const SelectableGrid = ({
   imgSize,
   cellSize = 30
 }: Props) => {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const [canvasSize, setCanvasSize] = React.useState<CanvasSize>({
     width: 0,
     height: 0
@@ -120,12 +121,50 @@ export const SelectableGrid = ({
       bottom: paddingBottom
     })
   }, [canvasSize, cellSize])
+
+  // draw grid
+  React.useEffect(() => {
+    if (!canvasRef.current) {
+      return
+    }
+
+    const ctx = canvasRef.current.getContext('2d')
+
+    if (!ctx) {
+      return
+    }
+
+    const { width, height } = canvasSize
+    const { top, left, right, bottom } = paddings
+
+    ctx.clearRect(0, 0, width, height)
+
+    ctx.strokeStyle = 'blue'
+    ctx.setLineDash([5, 5])
+    ctx.lineDashOffset = 0
+
+    ctx.beginPath()
+
+    for (let x = left; x <= width - right; x += cellSize) {
+      ctx.moveTo(x, top)
+      ctx.lineTo(x, height - bottom)
+    }
+
+    for (let y = top; y <= height - bottom; y += cellSize) {
+      ctx.moveTo(left, y)
+      ctx.lineTo(width - right, y)
+    }
+
+    ctx.stroke()
+  }, [paddings, canvasSize, cellSize])
+
   if (!containerSize || !imgSize) {
     return null
   }
 
   return (
     <canvas
+      ref={canvasRef}
       className={styles.canvas}
       style={{ ...canvasStyles }}
       width={canvasSize.width}
