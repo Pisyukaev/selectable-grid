@@ -18,6 +18,13 @@ interface Paddings {
   right: number
   bottom: number
 }
+
+interface Rect {
+  x: number
+  y: number
+  w: number
+  h: number
+}
 interface Props {
   containerSize?: Size
   imgSize?: Size
@@ -30,6 +37,8 @@ export const SelectableGrid = ({
   cellSize = 30
 }: Props) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
+  const [isDrag, setIsDrag] = React.useState<boolean>(false)
+  const [rect, setRect] = React.useState<Rect>({ x: 0, y: 0, w: 0, h: 0 })
   const [canvasSize, setCanvasSize] = React.useState<CanvasSize>({
     width: 0,
     height: 0
@@ -47,6 +56,32 @@ export const SelectableGrid = ({
     right: 0,
     bottom: 0
   })
+
+  const handleMouseDown = ({
+    nativeEvent: { offsetX, offsetY }
+  }: React.MouseEvent) => {
+    setIsDrag(true)
+    setRect({ ...rect, x: offsetX, y: offsetY })
+  }
+
+  const handleMouseUp = () => {
+    setIsDrag(false)
+    setRect({ x: 0, y: 0, w: 0, h: 0 })
+  }
+
+  const handleMouseMove = ({
+    nativeEvent: { offsetX, offsetY }
+  }: React.MouseEvent) => {
+    if (!isDrag) {
+      return
+    }
+
+    setRect({
+      ...rect,
+      w: offsetX - rect.x,
+      h: offsetY - rect.y
+    })
+  }
 
   // set canvas size
   React.useEffect(() => {
@@ -158,6 +193,28 @@ export const SelectableGrid = ({
     ctx.stroke()
   }, [paddings, canvasSize, cellSize])
 
+  React.useEffect(() => {
+    if (!canvasRef.current) {
+      return
+    }
+
+    const ctx = canvasRef.current.getContext('2d')
+
+    if (!ctx) {
+      return
+    }
+
+    ctx.clearRect(0, 0, canvasSize.width, canvasSize.height)
+
+    drawGrid()
+
+    ctx.strokeStyle = 'red'
+    ctx.fillStyle = 'rgba(100,0,0,0.3)'
+    ctx.setLineDash([0, 0])
+
+    ctx.strokeRect(rect.x, rect.y, rect.w, rect.h)
+    ctx.fillRect(rect.x, rect.y, rect.w, rect.h)
+  }, [canvasSize, rect])
 
   React.useEffect(() => {
     requestAnimationFrame(drawGrid)
@@ -174,6 +231,9 @@ export const SelectableGrid = ({
       style={{ ...canvasStyles }}
       width={canvasSize.width}
       height={canvasSize.height}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseMove={handleMouseMove}
     />
   )
 }
