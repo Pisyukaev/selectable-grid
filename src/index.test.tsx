@@ -1,7 +1,7 @@
-import { ExampleComponent } from '.'
+import { SelectableGrid } from '.'
 
-describe('ExampleComponent', () => {
+describe('SelectableGrid', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(SelectableGrid).toBeTruthy()
   })
 })
