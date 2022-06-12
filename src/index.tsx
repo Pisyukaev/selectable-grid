@@ -11,12 +11,24 @@ interface CanvasSize {
   width: number
   height: number
 }
+
+interface Paddings {
+  top: number
+  left: number
+  right: number
+  bottom: number
+}
 interface Props {
   containerSize?: Size
   imgSize?: Size
+  cellSize?: number
 }
 
-export const SelectableGrid = ({ containerSize, imgSize }: Props) => {
+export const SelectableGrid = ({
+  containerSize,
+  imgSize,
+  cellSize = 30
+}: Props) => {
   const [canvasSize, setCanvasSize] = React.useState<CanvasSize>({
     width: 0,
     height: 0
@@ -26,6 +38,13 @@ export const SelectableGrid = ({ containerSize, imgSize }: Props) => {
     left: '0',
     right: '0',
     bottom: '0'
+  })
+
+  const [paddings, setPaddings] = React.useState<Paddings>({
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
   })
 
   // set canvas size
@@ -75,6 +94,32 @@ export const SelectableGrid = ({ containerSize, imgSize }: Props) => {
     setCanvasStyles(styles)
   }, [containerSize, canvasSize])
 
+  // set paddings for grid
+  React.useEffect(() => {
+    const { width, height } = canvasSize
+
+    if (!width || !height) {
+      return
+    }
+
+    const cellCountX = Math.floor(width / cellSize)
+    const cellCountY = Math.floor(height / cellSize)
+
+    const paddingX = width - cellCountX * cellSize
+    const paddingY = height - cellCountY * cellSize
+
+    const paddingTop = paddingY / 2 - 0.5
+    const paddingLeft = paddingX / 2 - 0.5
+    const paddingRight = paddingLeft
+    const paddingBottom = paddingTop
+
+    setPaddings({
+      top: paddingTop,
+      left: paddingLeft,
+      right: paddingRight,
+      bottom: paddingBottom
+    })
+  }, [canvasSize, cellSize])
   if (!containerSize || !imgSize) {
     return null
   }
