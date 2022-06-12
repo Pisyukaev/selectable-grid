@@ -123,7 +123,7 @@ export const SelectableGrid = ({
   }, [canvasSize, cellSize])
 
   // draw grid
-  React.useEffect(() => {
+  const drawGrid = React.useCallback(() => {
     if (!canvasRef.current) {
       return
     }
@@ -157,6 +157,11 @@ export const SelectableGrid = ({
 
     ctx.stroke()
   }, [paddings, canvasSize, cellSize])
+
+
+  React.useEffect(() => {
+    requestAnimationFrame(drawGrid)
+  }, [drawGrid])
 
   if (!containerSize || !imgSize) {
     return null
