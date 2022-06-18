@@ -242,8 +242,8 @@ export const SelectableGrid = ({
     const { x, y, w, h } = rect
     const { top, left } = paddings
 
-    const cellCountX = Math.ceil(w / cellSize) + 1
-    const cellCountY = Math.ceil(h / cellSize) + 1
+    const cellCountX = Math.ceil(w / cellSize) || 1
+    const cellCountY = Math.ceil(h / cellSize) || 1
 
     for (let cellX = 0; cellX < cellCountX; cellX += 1) {
       for (let cellY = 0; cellY < cellCountY; cellY += 1) {
