@@ -239,6 +239,9 @@ export const SelectableGrid = ({
       return
     }
 
+    ctx.strokeStyle = 'red'
+    ctx.fillStyle = 'rgba(100,0,0,0.3)'
+
     const { x, y, w, h } = rect
     const { top, left } = paddings
 
