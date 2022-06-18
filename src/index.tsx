@@ -36,6 +36,8 @@ interface Point {
   y: number
 }
 
+const CELL_OFFSET = 5
+
 export const SelectableGrid = ({
   containerSize,
   imgSize,
@@ -248,14 +250,24 @@ export const SelectableGrid = ({
         const positionX =
           Math.floor((x + cellSize * cellX - left) / cellSize) * cellSize +
           left +
-          2.5
+          CELL_OFFSET / 2
         const positionY =
           Math.floor((y + cellSize * cellY - top) / cellSize) * cellSize +
           top +
-          2.5
+          CELL_OFFSET / 2
 
-        ctx.clearRect(positionX, positionY, cellSize - 5, cellSize - 5)
-        ctx.fillRect(positionX, positionY, cellSize - 5, cellSize - 5)
+        ctx.clearRect(
+          positionX,
+          positionY,
+          cellSize - CELL_OFFSET,
+          cellSize - CELL_OFFSET
+        )
+        ctx.fillRect(
+          positionX,
+          positionY,
+          cellSize - CELL_OFFSET,
+          cellSize - CELL_OFFSET
+        )
       }
     }
   }, [cellSize, rect, paddings])
