@@ -222,7 +222,7 @@ export const SelectableGrid = ({
 
     ctx.strokeRect(rect.x, rect.y, rect.w, rect.h)
     ctx.fillRect(rect.x, rect.y, rect.w, rect.h)
-  }, [canvasSize, rect])
+  }, [rect])
 
   const fillCells = React.useCallback(() => {
     if (!canvasRef.current) {
@@ -270,7 +270,7 @@ export const SelectableGrid = ({
         )
       }
     }
-  }, [cellSize, rect, paddings])
+  }, [startPoint, rect, paddings, cellSize])
 
   // all draws
   React.useEffect(() => {
