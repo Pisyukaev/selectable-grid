@@ -73,7 +73,6 @@ export const SelectableGrid = ({
 
   const handleMouseUp = () => {
     setIsDrag(false)
-    setRect({ x: 0, y: 0, w: 0, h: 0 })
   }
 
   const handleMouseMove = ({
@@ -223,6 +222,44 @@ export const SelectableGrid = ({
     ctx.fillRect(rect.x, rect.y, rect.w, rect.h)
   }, [canvasSize, rect])
 
+  const fillCells = React.useCallback(() => {
+    if (!canvasRef.current) {
+      return
+    }
+
+    const ctx = canvasRef.current.getContext('2d')
+
+    if (!ctx) {
+      return
+    }
+
+    if (!startPoint) {
+      return
+    }
+
+    const { x, y, w, h } = rect
+    const { top, left } = paddings
+
+    const cellCountX = Math.ceil(w / cellSize) + 1
+    const cellCountY = Math.ceil(h / cellSize) + 1
+
+    for (let cellX = 0; cellX < cellCountX; cellX += 1) {
+      for (let cellY = 0; cellY < cellCountY; cellY += 1) {
+        const positionX =
+          Math.floor((x + cellSize * cellX - left) / cellSize) * cellSize +
+          left +
+          2.5
+        const positionY =
+          Math.floor((y + cellSize * cellY - top) / cellSize) * cellSize +
+          top +
+          2.5
+
+        ctx.clearRect(positionX, positionY, cellSize - 5, cellSize - 5)
+        ctx.fillRect(positionX, positionY, cellSize - 5, cellSize - 5)
+      }
+    }
+  }, [cellSize, rect, paddings])
+
   // all draws
   React.useEffect(() => {
     if (!canvasRef.current) {
@@ -238,8 +275,11 @@ export const SelectableGrid = ({
     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height)
 
     drawGrid()
-    drawSelectArea()
-  }, [canvasSize, drawGrid, drawSelectArea])
+    fillCells()
+    if (isDrag) {
+      drawSelectArea()
+    }
+  }, [canvasSize, isDrag, drawGrid, fillCells, drawSelectArea])
 
   if (!containerSize || !imgSize) {
     return null
