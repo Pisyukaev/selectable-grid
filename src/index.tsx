@@ -31,6 +31,11 @@ interface Props {
   cellSize?: number
 }
 
+interface Point {
+  x: number
+  y: number
+}
+
 export const SelectableGrid = ({
   containerSize,
   imgSize,
@@ -39,6 +44,7 @@ export const SelectableGrid = ({
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const [isDrag, setIsDrag] = React.useState<boolean>(false)
   const [rect, setRect] = React.useState<Rect>({ x: 0, y: 0, w: 0, h: 0 })
+  const [startPoint, setStartPoint] = React.useState<Point>({ x: 0, y: 0 })
   const [canvasSize, setCanvasSize] = React.useState<CanvasSize>({
     width: 0,
     height: 0
@@ -61,7 +67,8 @@ export const SelectableGrid = ({
     nativeEvent: { offsetX, offsetY }
   }: React.MouseEvent) => {
     setIsDrag(true)
-    setRect({ ...rect, x: offsetX, y: offsetY })
+    setStartPoint({ x: offsetX, y: offsetY })
+    setRect({ x: offsetX, y: offsetY, w: 0, h: 0 })
   }
 
   const handleMouseUp = () => {
@@ -77,9 +84,10 @@ export const SelectableGrid = ({
     }
 
     setRect({
-      ...rect,
-      w: offsetX - rect.x,
-      h: offsetY - rect.y
+      x: Math.min(offsetX, startPoint.x),
+      y: Math.min(offsetY, startPoint.y),
+      w: Math.abs(offsetX - startPoint.x),
+      h: Math.abs(offsetY - startPoint.y)
     })
   }
 
