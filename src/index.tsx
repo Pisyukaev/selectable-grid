@@ -44,7 +44,7 @@ export const SelectableGrid = ({
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const [isDrag, setIsDrag] = React.useState<boolean>(false)
   const [rect, setRect] = React.useState<Rect>({ x: 0, y: 0, w: 0, h: 0 })
-  const [startPoint, setStartPoint] = React.useState<Point>({ x: 0, y: 0 })
+  const [startPoint, setStartPoint] = React.useState<Point | null>(null)
   const [canvasSize, setCanvasSize] = React.useState<CanvasSize>({
     width: 0,
     height: 0
@@ -80,6 +80,10 @@ export const SelectableGrid = ({
     nativeEvent: { offsetX, offsetY }
   }: React.MouseEvent) => {
     if (!isDrag) {
+      return
+    }
+
+    if (!startPoint) {
       return
     }
 
