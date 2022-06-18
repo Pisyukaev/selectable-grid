@@ -165,7 +165,6 @@ export const SelectableGrid = ({
     })
   }, [canvasSize, cellSize])
 
-  // draw grid
   const drawGrid = React.useCallback(() => {
     if (!canvasRef.current) {
       return
@@ -201,6 +200,26 @@ export const SelectableGrid = ({
     ctx.stroke()
   }, [paddings, canvasSize, cellSize])
 
+  const drawSelectArea = React.useCallback(() => {
+    if (!canvasRef.current) {
+      return
+    }
+
+    const ctx = canvasRef.current.getContext('2d')
+
+    if (!ctx) {
+      return
+    }
+
+    ctx.strokeStyle = 'red'
+    ctx.fillStyle = 'rgba(100,0,0,0.3)'
+    ctx.setLineDash([0, 0])
+
+    ctx.strokeRect(rect.x, rect.y, rect.w, rect.h)
+    ctx.fillRect(rect.x, rect.y, rect.w, rect.h)
+  }, [canvasSize, rect])
+
+  // all draws
   React.useEffect(() => {
     if (!canvasRef.current) {
       return
@@ -215,18 +234,8 @@ export const SelectableGrid = ({
     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height)
 
     drawGrid()
-
-    ctx.strokeStyle = 'red'
-    ctx.fillStyle = 'rgba(100,0,0,0.3)'
-    ctx.setLineDash([0, 0])
-
-    ctx.strokeRect(rect.x, rect.y, rect.w, rect.h)
-    ctx.fillRect(rect.x, rect.y, rect.w, rect.h)
-  }, [canvasSize, rect])
-
-  React.useEffect(() => {
-    requestAnimationFrame(drawGrid)
-  }, [drawGrid])
+    drawSelectArea()
+  }, [canvasSize, drawGrid, drawSelectArea])
 
   if (!containerSize || !imgSize) {
     return null
