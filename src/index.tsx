@@ -1,39 +1,12 @@
 import * as React from 'react'
+
+import { Size, CanvasSize, Paddings, Point, Rect } from './types'
 import styles from './styles.module.css'
 
-interface Size {
-  width: number
-  height: number
-  aspect: number
-}
-
-interface CanvasSize {
-  width: number
-  height: number
-}
-
-interface Paddings {
-  top: number
-  left: number
-  right: number
-  bottom: number
-}
-
-interface Rect {
-  x: number
-  y: number
-  w: number
-  h: number
-}
 interface Props {
   containerSize?: Size
   imgSize?: Size
   cellSize?: number
-}
-
-interface Point {
-  x: number
-  y: number
 }
 
 const CELL_OFFSET = 5
