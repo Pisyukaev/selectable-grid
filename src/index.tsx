@@ -8,10 +8,15 @@ import {
 import { Size, Point, Rect } from './types'
 import styles from './styles.module.css'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const NOOP = () => {}
 interface Props {
   containerSize?: Size
   imgSize?: Size
   cellSize?: number
+  onMouseDown?: (e: React.MouseEvent, startDownPosition: Point) => void
+  onMouseMove?: (e: React.MouseEvent, area: Rect) => void
+  onMouseUp?: (e: React.MouseEvent, area: Rect) => void
 }
 
 const CELL_OFFSET = 5
@@ -19,7 +24,10 @@ const CELL_OFFSET = 5
 export const SelectableGrid = ({
   containerSize,
   imgSize,
-  cellSize = 30
+  cellSize = 30,
+  onMouseDown = NOOP,
+  onMouseMove = NOOP,
+  onMouseUp = NOOP
 }: Props) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const [isDrag, setIsDrag] = React.useState<boolean>(false)
@@ -29,21 +37,29 @@ export const SelectableGrid = ({
   const canvasStyles = useCanvasStyles({ containerSize, canvasSize })
   const paddings = useCanvasPaddings({ canvasSize, cellSize })
 
-  const handleMouseDown = ({
-    nativeEvent: { offsetX, offsetY }
-  }: React.MouseEvent) => {
+  const handleMouseDown = (event: React.MouseEvent) => {
+    const {
+      nativeEvent: { offsetX, offsetY }
+    } = event
+
+    const point = { x: offsetX, y: offsetY }
+
     setIsDrag(true)
-    setStartPoint({ x: offsetX, y: offsetY })
-    setRect({ x: offsetX, y: offsetY, w: 0, h: 0 })
+    setStartPoint(point)
+    setRect({ ...point, w: 0, h: 0 })
+    onMouseDown(event, point)
   }
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (event: React.MouseEvent) => {
     setIsDrag(false)
+    onMouseUp(event, rect)
   }
 
-  const handleMouseMove = ({
-    nativeEvent: { offsetX, offsetY }
-  }: React.MouseEvent) => {
+  const handleMouseMove = (event: React.MouseEvent) => {
+    const {
+      nativeEvent: { offsetX, offsetY }
+    } = event
+
     if (!isDrag) {
       return
     }
@@ -52,12 +68,16 @@ export const SelectableGrid = ({
       return
     }
 
-    setRect({
+    const area = {
       x: Math.min(offsetX, startPoint.x),
       y: Math.min(offsetY, startPoint.y),
       w: Math.abs(offsetX - startPoint.x),
       h: Math.abs(offsetY - startPoint.y)
-    })
+    }
+
+    setRect(area)
+
+    onMouseMove(event, area)
   }
 
   const drawGrid = React.useCallback(() => {
