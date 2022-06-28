@@ -3,7 +3,8 @@ import * as React from 'react'
 import {
   useCanvasResolution,
   useCanvasPaddings,
-  useCanvasStyles
+  useCanvasStyles,
+  useMouseCallbacks
 } from './hooks'
 import { Size, Point, SelectableArea } from './types'
 import styles from './styles.module.css'
@@ -30,60 +31,17 @@ export const SelectableGrid = ({
   onMouseUp = NOOP
 }: Props) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
-  const [isDrag, setIsDrag] = React.useState<boolean>(false)
-  const [rect, setRect] = React.useState<SelectableArea>({
-    x: 0,
-    y: 0,
-    w: 0,
-    h: 0
-  })
-  const [startPoint, setStartPoint] = React.useState<Point | null>(null)
   const canvasSize = useCanvasResolution({ containerSize, imgSize })
   const canvasStyles = useCanvasStyles({ containerSize, canvasSize })
   const paddings = useCanvasPaddings({ canvasSize, cellSize })
-
-  const handleMouseDown = (event: React.MouseEvent) => {
-    const {
-      nativeEvent: { offsetX, offsetY }
-    } = event
-
-    const point = { x: offsetX, y: offsetY }
-
-    setIsDrag(true)
-    setStartPoint(point)
-    setRect({ ...point, w: 0, h: 0 })
-    onMouseDown(event, point)
-  }
-
-  const handleMouseUp = (event: React.MouseEvent) => {
-    setIsDrag(false)
-    onMouseUp(event, rect)
-  }
-
-  const handleMouseMove = (event: React.MouseEvent) => {
-    const {
-      nativeEvent: { offsetX, offsetY }
-    } = event
-
-    if (!isDrag) {
-      return
-    }
-
-    if (!startPoint) {
-      return
-    }
-
-    const area = {
-      x: Math.min(offsetX, startPoint.x),
-      y: Math.min(offsetY, startPoint.y),
-      w: Math.abs(offsetX - startPoint.x),
-      h: Math.abs(offsetY - startPoint.y)
-    }
-
-    setRect(area)
-
-    onMouseMove(event, area)
-  }
+  const {
+    isDrag,
+    area,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    startPoint
+  } = useMouseCallbacks({ onMouseDown, onMouseMove, onMouseUp })
 
   const drawGrid = React.useCallback(() => {
     if (!canvasRef.current) {
@@ -135,9 +93,11 @@ export const SelectableGrid = ({
     ctx.fillStyle = 'rgba(100,0,0,0.3)'
     ctx.setLineDash([0, 0])
 
-    ctx.strokeRect(rect.x, rect.y, rect.w, rect.h)
-    ctx.fillRect(rect.x, rect.y, rect.w, rect.h)
-  }, [rect])
+    const { x, y, w, h } = area
+
+    ctx.strokeRect(x, y, w, h)
+    ctx.fillRect(x, y, w, h)
+  }, [area])
 
   const fillCells = React.useCallback(() => {
     if (!canvasRef.current) {
@@ -157,7 +117,7 @@ export const SelectableGrid = ({
     ctx.strokeStyle = 'red'
     ctx.fillStyle = 'rgba(100,0,0,0.3)'
 
-    const { x, y, w, h } = rect
+    const { x, y, w, h } = area
     const { top, left } = paddings
 
     const startX = Math.floor((x - left) / cellSize)
@@ -194,7 +154,7 @@ export const SelectableGrid = ({
         )
       }
     }
-  }, [startPoint, rect, paddings, cellSize])
+  }, [startPoint, area, paddings, cellSize])
 
   // all draws
   React.useEffect(() => {

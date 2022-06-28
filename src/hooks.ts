@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { Size, CanvasSize, Paddings } from './types'
+import { Size, CanvasSize, Paddings, Point, SelectableArea } from './types'
 
 // set canvas size
 export const useCanvasResolution = ({
@@ -123,4 +123,75 @@ export const useCanvasStyles = ({
   }, [containerSize, canvasSize])
 
   return canvasStyles
+}
+
+export const useMouseCallbacks = ({
+  onMouseDown,
+  onMouseMove,
+  onMouseUp
+}: {
+  onMouseDown: (e: React.MouseEvent, downPosition: Point) => void
+  onMouseMove: (e: React.MouseEvent, area: SelectableArea) => void
+  onMouseUp: (e: React.MouseEvent, area: SelectableArea) => void
+}) => {
+  const [isDrag, setIsDrag] = React.useState<boolean>(false)
+  const [startPoint, setStartPoint] = React.useState<Point | null>(null)
+  const [area, setArea] = React.useState<SelectableArea>({
+    x: 0,
+    y: 0,
+    w: 0,
+    h: 0
+  })
+
+  const handleMouseDown = (event: React.MouseEvent) => {
+    const {
+      nativeEvent: { offsetX, offsetY }
+    } = event
+
+    const point = { x: offsetX, y: offsetY }
+
+    setIsDrag(true)
+    setStartPoint(point)
+    setArea({ ...point, w: 0, h: 0 })
+    onMouseDown(event, point)
+  }
+
+  const handleMouseUp = (event: React.MouseEvent) => {
+    setIsDrag(false)
+    onMouseUp(event, area)
+  }
+
+  const handleMouseMove = (event: React.MouseEvent) => {
+    const {
+      nativeEvent: { offsetX, offsetY }
+    } = event
+
+    if (!isDrag) {
+      return
+    }
+
+    if (!startPoint) {
+      return
+    }
+
+    const area = {
+      x: Math.min(offsetX, startPoint.x),
+      y: Math.min(offsetY, startPoint.y),
+      w: Math.abs(offsetX - startPoint.x),
+      h: Math.abs(offsetY - startPoint.y)
+    }
+
+    setArea(area)
+
+    onMouseMove(event, area)
+  }
+
+  return {
+    isDrag,
+    area,
+    startPoint,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp
+  }
 }
