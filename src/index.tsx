@@ -1,6 +1,11 @@
 import * as React from 'react'
 
-import { Size, CanvasSize, Paddings, Point, Rect } from './types'
+import {
+  useCanvasResolution,
+  useCanvasPaddings,
+  useCanvasStyles
+} from './hooks'
+import { Size, Point, Rect } from './types'
 import styles from './styles.module.css'
 
 interface Props {
@@ -20,23 +25,9 @@ export const SelectableGrid = ({
   const [isDrag, setIsDrag] = React.useState<boolean>(false)
   const [rect, setRect] = React.useState<Rect>({ x: 0, y: 0, w: 0, h: 0 })
   const [startPoint, setStartPoint] = React.useState<Point | null>(null)
-  const [canvasSize, setCanvasSize] = React.useState<CanvasSize>({
-    width: 0,
-    height: 0
-  })
-  const [canvasStyles, setCanvasStyles] = React.useState({
-    top: '0',
-    left: '0',
-    right: '0',
-    bottom: '0'
-  })
-
-  const [paddings, setPaddings] = React.useState<Paddings>({
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
-  })
+  const canvasSize = useCanvasResolution({ containerSize, imgSize })
+  const canvasStyles = useCanvasStyles({ containerSize, canvasSize })
+  const paddings = useCanvasPaddings({ canvasSize, cellSize })
 
   const handleMouseDown = ({
     nativeEvent: { offsetX, offsetY }
@@ -68,80 +59,6 @@ export const SelectableGrid = ({
       h: Math.abs(offsetY - startPoint.y)
     })
   }
-
-  // set canvas size
-  React.useEffect(() => {
-    if (!containerSize || !imgSize) {
-      return
-    }
-
-    const { width, height } = containerSize
-    const { aspect } = imgSize
-
-    const newImgWidth = height * aspect
-    const newImgHeight = width / aspect
-
-    const isWidest = newImgHeight <= height
-
-    const size = {
-      width: isWidest ? width : newImgWidth,
-      height: isWidest ? newImgHeight : height
-    }
-
-    setCanvasSize(size)
-  }, [containerSize, imgSize])
-
-  // set canvas styles
-  React.useEffect(() => {
-    if (!containerSize || !canvasSize.width || !canvasSize.height) {
-      return
-    }
-
-    const { width: containerWidth, height: containerHeight } = containerSize
-    const { width: canvasWidth, height: canvasHeight } = canvasSize
-
-    const isOffsetX = canvasWidth <= containerWidth
-    const isOffsetY = canvasHeight <= containerHeight
-
-    const offsetX = isOffsetX ? (containerWidth - canvasWidth) / 2 : 0
-    const offsetY = isOffsetY ? (containerHeight - canvasHeight) / 2 : 0
-
-    const styles = {
-      top: `${(offsetY / containerHeight) * 100}%`,
-      left: `${(offsetX / containerWidth) * 100}%`,
-      right: `${(offsetX / containerWidth) * 100}%`,
-      bottom: `${(offsetY / containerHeight) * 100}%`
-    }
-
-    setCanvasStyles(styles)
-  }, [containerSize, canvasSize])
-
-  // set paddings for grid
-  React.useEffect(() => {
-    const { width, height } = canvasSize
-
-    if (!width || !height) {
-      return
-    }
-
-    const cellCountX = Math.floor(width / cellSize)
-    const cellCountY = Math.floor(height / cellSize)
-
-    const paddingX = width - cellCountX * cellSize
-    const paddingY = height - cellCountY * cellSize
-
-    const paddingTop = paddingY / 2 - 0.5
-    const paddingLeft = paddingX / 2 - 0.5
-    const paddingRight = paddingLeft
-    const paddingBottom = paddingTop
-
-    setPaddings({
-      top: paddingTop,
-      left: paddingLeft,
-      right: paddingRight,
-      bottom: paddingBottom
-    })
-  }, [canvasSize, cellSize])
 
   const drawGrid = React.useCallback(() => {
     if (!canvasRef.current) {
