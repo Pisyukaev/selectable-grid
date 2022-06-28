@@ -6,7 +6,7 @@ import {
   useCanvasStyles,
   useMouseCallbacks
 } from './hooks'
-import { Size, Point, SelectableArea } from './types'
+import { Size, Point, SelectableArea, CtxStyles } from './types'
 import styles from './styles.module.css'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -36,18 +36,18 @@ interface Props {
   onMouseMove?: (e: React.MouseEvent, area: SelectableArea) => void
   onMouseUp?: (e: React.MouseEvent, area: SelectableArea) => void
   gridStyles?: {
-    strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
-    lineDashOffset?: CanvasPathDrawingStyles['lineDashOffset']
-    lineDash?: number[]
+    strokeStyle?: CtxStyles['strokeStyle']
+    lineDashOffset?: CtxStyles['lineDashOffset']
+    lineDash?: CtxStyles['lineDash']
   }
   selectAreaStyles?: {
-    strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
-    fillStyle?: CanvasFillStrokeStyles['fillStyle']
-    lineDash?: number[]
+    strokeStyle?: CtxStyles['strokeStyle']
+    fillStyle?: CtxStyles['fillStyle']
+    lineDash?: CtxStyles['lineDash']
   }
   cellsStyles?: {
-    strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
-    fillStyle?: CanvasFillStrokeStyles['fillStyle']
+    strokeStyle?: CtxStyles['strokeStyle']
+    fillStyle?: CtxStyles['fillStyle']
   }
 }
 

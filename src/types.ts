@@ -27,3 +27,10 @@ export interface Point {
   x: number
   y: number
 }
+
+export interface CtxStyles {
+  strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
+  lineDashOffset?: CanvasPathDrawingStyles['lineDashOffset']
+  fillStyle?: CanvasFillStrokeStyles['fillStyle']
+  lineDash?: number[]
+}
