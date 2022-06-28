@@ -11,6 +11,23 @@ import styles from './styles.module.css'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const NOOP = () => {}
+
+const GRID_STYLES = {
+  strokeStyle: 'blue',
+  lineDashOffset: 0,
+  lineDash: [5, 5]
+}
+
+const SELECT_AREA_STYLES = {
+  strokeStyle: 'red',
+  fillStyle: 'rgba(100,0,0,0.3)',
+  lineDash: [0, 0]
+}
+
+const CELLS_STYLES = {
+  strokeStyle: 'red',
+  fillStyle: 'rgba(100,0,0,0.3)'
+}
 interface Props {
   containerSize?: Size
   imgSize?: Size
@@ -18,6 +35,20 @@ interface Props {
   onMouseDown?: (e: React.MouseEvent, startDownPosition: Point) => void
   onMouseMove?: (e: React.MouseEvent, area: SelectableArea) => void
   onMouseUp?: (e: React.MouseEvent, area: SelectableArea) => void
+  gridStyles?: {
+    strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
+    lineDashOffset?: CanvasPathDrawingStyles['lineDashOffset']
+    lineDash?: number[]
+  }
+  selectAreaStyles?: {
+    strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
+    fillStyle?: CanvasFillStrokeStyles['fillStyle']
+    lineDash?: number[]
+  }
+  cellsStyles?: {
+    strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
+    fillStyle?: CanvasFillStrokeStyles['fillStyle']
+  }
 }
 
 const CELL_OFFSET = 5
@@ -28,7 +59,10 @@ export const SelectableGrid = ({
   cellSize = 30,
   onMouseDown = NOOP,
   onMouseMove = NOOP,
-  onMouseUp = NOOP
+  onMouseUp = NOOP,
+  gridStyles = GRID_STYLES,
+  selectAreaStyles = SELECT_AREA_STYLES,
+  cellsStyles = CELLS_STYLES
 }: Props) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const canvasSize = useCanvasResolution({ containerSize, imgSize })
@@ -59,9 +93,9 @@ export const SelectableGrid = ({
 
     ctx.clearRect(0, 0, width, height)
 
-    ctx.strokeStyle = 'blue'
-    ctx.setLineDash([5, 5])
-    ctx.lineDashOffset = 0
+    ctx.strokeStyle = gridStyles.strokeStyle || GRID_STYLES.strokeStyle
+    ctx.setLineDash(gridStyles.lineDash || GRID_STYLES.lineDash)
+    ctx.lineDashOffset = gridStyles.lineDashOffset || GRID_STYLES.lineDashOffset
 
     ctx.beginPath()
 
@@ -76,7 +110,7 @@ export const SelectableGrid = ({
     }
 
     ctx.stroke()
-  }, [paddings, canvasSize, cellSize])
+  }, [canvasSize, paddings, gridStyles, cellSize])
 
   const drawSelectArea = React.useCallback(() => {
     if (!canvasRef.current) {
@@ -89,15 +123,16 @@ export const SelectableGrid = ({
       return
     }
 
-    ctx.strokeStyle = 'red'
-    ctx.fillStyle = 'rgba(100,0,0,0.3)'
-    ctx.setLineDash([0, 0])
+    ctx.strokeStyle =
+      selectAreaStyles.strokeStyle || SELECT_AREA_STYLES.strokeStyle
+    ctx.fillStyle = selectAreaStyles.fillStyle || SELECT_AREA_STYLES.fillStyle
+    ctx.setLineDash(selectAreaStyles.lineDash || SELECT_AREA_STYLES.lineDash)
 
     const { x, y, w, h } = area
 
     ctx.strokeRect(x, y, w, h)
     ctx.fillRect(x, y, w, h)
-  }, [area])
+  }, [area, selectAreaStyles])
 
   const fillCells = React.useCallback(() => {
     if (!canvasRef.current) {
@@ -114,8 +149,8 @@ export const SelectableGrid = ({
       return
     }
 
-    ctx.strokeStyle = 'red'
-    ctx.fillStyle = 'rgba(100,0,0,0.3)'
+    ctx.strokeStyle = cellsStyles.strokeStyle || CELLS_STYLES.strokeStyle
+    ctx.fillStyle = cellsStyles.fillStyle || CELLS_STYLES.fillStyle
 
     const { x, y, w, h } = area
     const { top, left } = paddings
@@ -154,7 +189,7 @@ export const SelectableGrid = ({
         )
       }
     }
-  }, [startPoint, area, paddings, cellSize])
+  }, [startPoint, cellsStyles, area, paddings, cellSize])
 
   // all draws
   React.useEffect(() => {
