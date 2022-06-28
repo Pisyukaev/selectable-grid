@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { SelectableGrid } from 'selectable-grid'
 import 'selectable-grid/dist/index.css'
+import { Point, Rect } from '../../dist/types'
 
 interface Size {
   width: number
@@ -52,7 +53,23 @@ const App = () => {
         onLoad={handleLoad}
       />
 
-      <SelectableGrid containerSize={containerSize} imgSize={imgSize} />
+      <SelectableGrid
+        containerSize={containerSize}
+        imgSize={imgSize}
+        onMouseDown={(e: React.MouseEvent, downPosition: Point) => {
+          console.log('event => ', e)
+          console.log('downPosition => ', downPosition)
+        }}
+        onMouseMove={(e: React.MouseEvent, area: Rect) => {
+          console.log('event => ', e)
+          console.log('area => ', area)
+        }}
+        onMouseUp={(e: React.MouseEvent, area: Rect) => {
+          console.log('mouse up')
+          console.log('event => ', e)
+          console.log('area => ', area)
+        }}
+      />
     </div>
   )
 }
