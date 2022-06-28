@@ -6,7 +6,10 @@
     "plugin:prettier/recommended",
     "prettier/standard",
     "prettier/react",
-    "plugin:@typescript-eslint/eslint-recommended"
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "eslint:recommended"
   ],
   "env": {
     "node": true
@@ -16,14 +19,15 @@
     "ecmaFeatures": {
       "legacyDecorators": true,
       "jsx": true
-    }
+    },
+    "project": "./tsconfig.json"
   },
   "settings": {
     "react": {
       "version": "16"
     }
   },
-  "plugins": ["react-hooks"],
+  "plugins": ["react-hooks", "@typescript-eslint"],
   "rules": {
     "space-before-function-paren": 0,
     "react/prop-types": 0,
@@ -31,6 +35,9 @@
     "react/jsx-fragments": 0,
     "react/no-unused-prop-types": 0,
     "import/export": 0,
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "semi": ["warn", "never"],
+    "@typescript-eslint/member-delimiter-style": "off",
+    "@typescript-eslint/explicit-function-return-type": "off"
   }
 }
