@@ -16,7 +16,7 @@ export interface Paddings {
   bottom: number
 }
 
-export interface Rect {
+export interface SelectableArea {
   x: number
   y: number
   w: number

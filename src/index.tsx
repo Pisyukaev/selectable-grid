@@ -5,7 +5,7 @@ import {
   useCanvasPaddings,
   useCanvasStyles
 } from './hooks'
-import { Size, Point, Rect } from './types'
+import { Size, Point, SelectableArea } from './types'
 import styles from './styles.module.css'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -15,8 +15,8 @@ interface Props {
   imgSize?: Size
   cellSize?: number
   onMouseDown?: (e: React.MouseEvent, startDownPosition: Point) => void
-  onMouseMove?: (e: React.MouseEvent, area: Rect) => void
-  onMouseUp?: (e: React.MouseEvent, area: Rect) => void
+  onMouseMove?: (e: React.MouseEvent, area: SelectableArea) => void
+  onMouseUp?: (e: React.MouseEvent, area: SelectableArea) => void
 }
 
 const CELL_OFFSET = 5
@@ -31,7 +31,12 @@ export const SelectableGrid = ({
 }: Props) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const [isDrag, setIsDrag] = React.useState<boolean>(false)
-  const [rect, setRect] = React.useState<Rect>({ x: 0, y: 0, w: 0, h: 0 })
+  const [rect, setRect] = React.useState<SelectableArea>({
+    x: 0,
+    y: 0,
+    w: 0,
+    h: 0
+  })
   const [startPoint, setStartPoint] = React.useState<Point | null>(null)
   const canvasSize = useCanvasResolution({ containerSize, imgSize })
   const canvasStyles = useCanvasStyles({ containerSize, canvasSize })
