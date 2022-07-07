@@ -15,7 +15,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["resize-observer-browser"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "example"]
