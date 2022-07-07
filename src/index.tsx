@@ -1,10 +1,10 @@
 import * as React from 'react'
 
 import {
-  useCanvasResolution,
   useCanvasPaddings,
   useCanvasStyles,
-  useMouseCallbacks
+  useMouseCallbacks,
+  useResponsiveSize
 } from './hooks'
 import { Size, Point, SelectableArea, CtxStyles } from './types'
 import styles from './styles.module.css'
@@ -29,7 +29,7 @@ const CELLS_STYLES = {
   fillStyle: 'rgba(100,0,0,0.3)'
 }
 interface Props {
-  containerSize?: Size
+  container: HTMLDivElement | null
   imgSize?: Size
   cellSize?: number
   onMouseDown?: (e: React.MouseEvent, startDownPosition: Point) => void
@@ -54,7 +54,7 @@ interface Props {
 const CELL_OFFSET = 5
 
 export const SelectableGrid = ({
-  containerSize,
+  container,
   imgSize,
   cellSize = 30,
   onMouseDown = NOOP,
@@ -65,8 +65,8 @@ export const SelectableGrid = ({
   cellsStyles = CELLS_STYLES
 }: Props) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
-  const canvasSize = useCanvasResolution({ containerSize, imgSize })
-  const canvasStyles = useCanvasStyles({ containerSize, canvasSize })
+  const canvasSize = useResponsiveSize({ container, imgSize })
+  const canvasStyles = useCanvasStyles({ container, canvasSize })
   const paddings = useCanvasPaddings({ canvasSize, cellSize })
   const {
     isDrag,
@@ -224,7 +224,7 @@ export const SelectableGrid = ({
     }
   }, [canvasSize, isDrag, drawGrid, fillCells, drawSelectArea])
 
-  if (!containerSize || !imgSize) {
+  if (!container || !imgSize) {
     return null
   }
 
