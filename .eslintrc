@@ -38,6 +38,7 @@
     "react-hooks/exhaustive-deps": "warn",
     "semi": ["warn", "never"],
     "@typescript-eslint/member-delimiter-style": "off",
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "no-unused-vars": "warn"
   }
 }
