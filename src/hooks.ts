@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Size, CanvasSize, Paddings, Point, SelectableArea } from './types'
 
@@ -85,10 +85,10 @@ export const useCanvasPaddings = ({
 
 // set canvas styles
 export const useCanvasStyles = ({
-  containerSize,
+  container,
   canvasSize
 }: {
-  containerSize?: Size
+  container: HTMLDivElement | null
   canvasSize: CanvasSize
 }) => {
   const [canvasStyles, setCanvasStyles] = React.useState({
@@ -99,11 +99,12 @@ export const useCanvasStyles = ({
   })
 
   useEffect(() => {
-    if (!containerSize || !canvasSize.width || !canvasSize.height) {
+    if (!container || !canvasSize.width || !canvasSize.height) {
       return
     }
 
-    const { width: containerWidth, height: containerHeight } = containerSize
+    const { offsetWidth: containerWidth, offsetHeight: containerHeight } =
+      container
     const { width: canvasWidth, height: canvasHeight } = canvasSize
 
     const isOffsetX = canvasWidth <= containerWidth
@@ -120,7 +121,7 @@ export const useCanvasStyles = ({
     }
 
     setCanvasStyles(styles)
-  }, [containerSize, canvasSize])
+  }, [container, canvasSize])
 
   return canvasStyles
 }
@@ -194,4 +195,44 @@ export const useMouseCallbacks = ({
     handleMouseMove,
     handleMouseUp
   }
+}
+
+export const useResponsiveSize = ({
+  container,
+  imgSize
+}: {
+  container: HTMLDivElement | null
+  imgSize?: Size
+}) => {
+  const resizeObserverRef = useRef<ResizeObserver>()
+  const [size, setSize] = useState<{
+    width: number
+    height: number
+    aspect: number
+  }>()
+
+  const handleResize = useCallback(() => {
+    if (!container) {
+      return
+    }
+
+    const { clientWidth, clientHeight } = container
+
+    setSize({
+      width: clientWidth,
+      height: clientHeight,
+      aspect: clientWidth / clientHeight
+    })
+  }, [container])
+
+  useEffect(() => {
+    if (!resizeObserverRef.current && container) {
+      resizeObserverRef.current = new ResizeObserver(handleResize)
+      resizeObserverRef.current.observe(container)
+    }
+  }, [container, handleResize])
+
+  const canvasSize = useCanvasResolution({ containerSize: size, imgSize })
+
+  return canvasSize
 }
