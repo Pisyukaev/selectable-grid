@@ -153,8 +153,10 @@ export const SelectableGrid = ({
     ctx.fillStyle = cellsStyles.fillStyle || CELLS_STYLES.fillStyle
 
     const { x, y, w, h } = area
-    const { top, left } = paddings
+    const { top, left, right, bottom } = paddings
+    const { width, height } = canvasSize
 
+    // TODO: To think about the algorithm for shading cells
     const startX = Math.floor((x - left) / cellSize)
     const endX = Math.ceil((x + w - left) / cellSize)
     const startY = Math.floor((y - top) / cellSize)
@@ -175,6 +177,16 @@ export const SelectableGrid = ({
           top +
           CELL_OFFSET / 2
 
+        // TODO: change the condition
+        if (
+          positionX < left ||
+          positionX > width - right ||
+          positionY < top ||
+          positionY > height - bottom
+        ) {
+          continue
+        }
+
         ctx.clearRect(
           positionX,
           positionY,
@@ -189,7 +201,7 @@ export const SelectableGrid = ({
         )
       }
     }
-  }, [startPoint, cellsStyles, area, paddings, cellSize])
+  }, [startPoint, cellsStyles, area, paddings, canvasSize, cellSize])
 
   // all draws
   React.useEffect(() => {
