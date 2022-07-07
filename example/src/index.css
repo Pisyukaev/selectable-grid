@@ -18,7 +18,13 @@ code {
   height: 500px;
   position: relative;
   display: flex;
-  background-color: cadetblue;
+  resize: both;
+  background: #EF476F;
+  overflow: auto;
   justify-content: center;
 }
 
+.img {
+  width: 100%;
+  object-fit: contain;
+}
