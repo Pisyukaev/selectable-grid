@@ -1,6 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-import { Size, CanvasSize, Paddings, Point, SelectableArea } from './types'
+import {
+  Size,
+  CanvasSize,
+  Paddings,
+  Point,
+  SelectableArea,
+  AreaInPx,
+  AreaInPercent,
+  AreaInfo
+} from './types'
 
 // set canvas size
 export const useCanvasResolution = ({
@@ -129,11 +138,17 @@ export const useCanvasStyles = ({
 export const useMouseCallbacks = ({
   onMouseDown,
   onMouseMove,
-  onMouseUp
+  onMouseUp,
+  paddings,
+  canvasSize,
+  cellSize
 }: {
   onMouseDown: (e: React.MouseEvent, downPosition: Point) => void
-  onMouseMove: (e: React.MouseEvent, area: SelectableArea) => void
-  onMouseUp: (e: React.MouseEvent, area: SelectableArea) => void
+  onMouseMove: (e: React.MouseEvent, areaInfo: AreaInfo) => void
+  onMouseUp: (e: React.MouseEvent, areaInfo: AreaInfo) => void
+  paddings: Paddings
+  canvasSize: CanvasSize
+  cellSize: number
 }) => {
   const [isDrag, setIsDrag] = React.useState<boolean>(false)
   const [startPoint, setStartPoint] = React.useState<Point | null>(null)
@@ -143,6 +158,47 @@ export const useMouseCallbacks = ({
     w: 0,
     h: 0
   })
+  const [areaInPx, setAreaInPx] = React.useState<AreaInPx>({
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  })
+
+  const [areaInPercent, setAreaInPercent] = React.useState<AreaInPercent>({
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  })
+
+  // calculate selected area in px and percent
+  useEffect(() => {
+    const { x, y, w, h } = area
+    const { left: pLeft, top: pTop } = paddings
+    const { width, height } = canvasSize
+
+    const left = Math.floor((x - pLeft) / cellSize) * cellSize + pLeft
+    const top = Math.floor((y - pTop) / cellSize) * cellSize + pTop
+    const right =
+      Math.floor((x + w - pLeft) / cellSize) * cellSize + pLeft + cellSize
+    const bottom =
+      Math.floor((y + h - pTop) / cellSize) * cellSize + pTop + cellSize
+
+    setAreaInPx({ top, left, right, bottom })
+    setAreaInPercent({
+      top: top / height,
+      left: left / width,
+      right: right / width,
+      bottom: bottom / height
+    })
+  }, [area, paddings, canvasSize, cellSize])
+
+  // reset selectable area when canvas changing own sizes
+  useEffect(() => {
+    setIsDrag(false)
+    setStartPoint(null)
+  }, [canvasSize])
 
   const handleMouseDown = (event: React.MouseEvent) => {
     const {
@@ -159,7 +215,7 @@ export const useMouseCallbacks = ({
 
   const handleMouseUp = (event: React.MouseEvent) => {
     setIsDrag(false)
-    onMouseUp(event, area)
+    onMouseUp(event, { area, areaInPx, areaInPercent })
   }
 
   const handleMouseMove = (event: React.MouseEvent) => {
@@ -184,7 +240,7 @@ export const useMouseCallbacks = ({
 
     setArea(area)
 
-    onMouseMove(event, area)
+    onMouseMove(event, { area, areaInPx, areaInPercent })
   }
 
   return {
