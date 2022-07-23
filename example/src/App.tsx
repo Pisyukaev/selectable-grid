@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 
 import { SelectableGrid } from 'selectable-grid'
 import 'selectable-grid/dist/index.css'
-import { Point, SelectableArea } from '../../dist/types'
+import { Point, AreaInfo } from '../../dist/types'
 
 interface Size {
   width: number
@@ -42,14 +42,13 @@ const App = () => {
           console.log('event => ', e)
           console.log('downPosition => ', downPosition)
         }}
-        onMouseMove={(e: React.MouseEvent, area: SelectableArea) => {
+        onMouseMove={(e: React.MouseEvent, areaInfo: AreaInfo) => {
           console.log('event => ', e)
-          console.log('area => ', area)
+          console.log('🚀 ~ areaInfo', areaInfo)
         }}
-        onMouseUp={(e: React.MouseEvent, area: SelectableArea) => {
-          console.log('mouse up')
+        onMouseUp={(e: React.MouseEvent, areaInfo: AreaInfo) => {
           console.log('event => ', e)
-          console.log('area => ', area)
+          console.log('🚀 ~ areaInfo', areaInfo)
         }}
       />
     </div>
