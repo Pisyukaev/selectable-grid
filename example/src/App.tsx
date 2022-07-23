@@ -2,13 +2,7 @@ import React, { useRef, useState } from 'react'
 
 import { SelectableGrid } from 'selectable-grid'
 import 'selectable-grid/dist/index.css'
-import { Point, AreaInfo } from '../../dist/types'
-
-interface Size {
-  width: number
-  height: number
-  aspect: number
-}
+import { Point, AreaInfo, Size } from '../../dist/types'
 
 const App = () => {
   const containerRef = useRef<HTMLDivElement>(null)
