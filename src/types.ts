@@ -9,6 +9,16 @@ export interface CanvasSize {
   height: number
 }
 
+interface Area {
+  top: number
+  left: number
+  right: number
+  bottom: number
+}
+
+export type AreaInPx = Area
+export type AreaInPercent = Area
+
 export interface Paddings {
   top: number
   left: number
@@ -21,6 +31,12 @@ export interface SelectableArea {
   y: number
   w: number
   h: number
+}
+
+export interface AreaInfo {
+  area: SelectableArea
+  areaInPx: AreaInPx
+  areaInPercent: AreaInPercent
 }
 
 export interface Point {
