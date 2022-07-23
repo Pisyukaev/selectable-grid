@@ -19,7 +19,7 @@ A React component library that allows you to select the desired area within a co
 
 - Example for responsive grid
 
-![responsive patrick](https://i.ibb.co/SQ8Q35D/patrik-responsive.gif)
+![responsive patrick](https://i.ibb.co/ypRYKYt/ezgif-com-gif-maker.webp)
 
 * * *
 
