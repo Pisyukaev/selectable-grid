@@ -6,7 +6,7 @@ import {
   useMouseCallbacks,
   useResponsiveSize
 } from './hooks'
-import { Size, Point, SelectableArea, CtxStyles } from './types'
+import { Size, Point, AreaInfo, CtxStyles } from './types'
 import styles from './styles.module.css'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -33,8 +33,8 @@ interface Props {
   imgSize?: Size
   cellSize?: number
   onMouseDown?: (e: React.MouseEvent, startDownPosition: Point) => void
-  onMouseMove?: (e: React.MouseEvent, area: SelectableArea) => void
-  onMouseUp?: (e: React.MouseEvent, area: SelectableArea) => void
+  onMouseMove?: (e: React.MouseEvent, areaInfo: AreaInfo) => void
+  onMouseUp?: (e: React.MouseEvent, areaInfo: AreaInfo) => void
   gridStyles?: {
     strokeStyle?: CtxStyles['strokeStyle']
     lineDashOffset?: CtxStyles['lineDashOffset']
@@ -75,7 +75,14 @@ export const SelectableGrid = ({
     handleMouseMove,
     handleMouseUp,
     startPoint
-  } = useMouseCallbacks({ onMouseDown, onMouseMove, onMouseUp })
+  } = useMouseCallbacks({
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    canvasSize,
+    cellSize,
+    paddings
+  })
 
   const drawGrid = React.useCallback(() => {
     if (!canvasRef.current) {
