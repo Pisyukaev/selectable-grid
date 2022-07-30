@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { getPointFromCell } from './helpers'
 import {
   useCanvasPaddings,
   useCanvasStyles,
@@ -184,13 +185,11 @@ export const SelectableGrid = ({
     for (let cellX = 0; cellX < countX; cellX += 1) {
       for (let cellY = 0; cellY < countY; cellY += 1) {
         const positionX =
-          Math.floor((x + cellSize * cellX - left) / cellSize) * cellSize +
-          left +
+          getPointFromCell(x + cellSize * cellX, left, cellSize) +
           CELL_OFFSET / 2
 
         const positionY =
-          Math.floor((y + cellSize * cellY - top) / cellSize) * cellSize +
-          top +
+          getPointFromCell(y + cellSize * cellY, top, cellSize) +
           CELL_OFFSET / 2
 
         // TODO: change the condition

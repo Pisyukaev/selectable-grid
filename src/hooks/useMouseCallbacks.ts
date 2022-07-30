@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { getPointFromCell } from '../helpers'
 import {
   AreaInfo,
   AreaInPercent,
@@ -53,12 +54,10 @@ export const useMouseCallbacks = ({
     const { left: pLeft, top: pTop } = paddings
     const { width, height } = canvasSize
 
-    const left = Math.floor((x - pLeft) / cellSize) * cellSize + pLeft
-    const top = Math.floor((y - pTop) / cellSize) * cellSize + pTop
-    const right =
-      Math.floor((x + w - pLeft) / cellSize) * cellSize + pLeft + cellSize
-    const bottom =
-      Math.floor((y + h - pTop) / cellSize) * cellSize + pTop + cellSize
+    const left = getPointFromCell(x, pLeft, cellSize)
+    const top = getPointFromCell(y, pTop, cellSize)
+    const right = getPointFromCell(x + w, pLeft, cellSize) + cellSize
+    const bottom = getPointFromCell(y + h, pTop, cellSize) + cellSize
 
     setAreaInPx({ top, left, right, bottom })
     setAreaInPercent({
