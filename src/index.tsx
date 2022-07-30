@@ -70,6 +70,8 @@ export const SelectableGrid = ({
   cellsStyles = CELLS_STYLES
 }: Props) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
+  const requestIdRef = React.useRef<number | null>(null)
+
   const canvasSize = useResponsiveSize({ container, imgSize })
   const canvasStyles = useCanvasStyles({ container, canvasSize })
   const paddings = useCanvasPaddings({ canvasSize, cellSize })
@@ -218,8 +220,8 @@ export const SelectableGrid = ({
     }
   }, [startPoint, cellsStyles, area, paddings, canvasSize, cellSize])
 
-  // all draws
-  React.useEffect(() => {
+  // all draw
+  const drawTick = () => {
     if (!canvasRef.current) {
       return
     }
@@ -237,7 +239,19 @@ export const SelectableGrid = ({
     if (isDrag) {
       drawSelectArea()
     }
-  }, [canvasSize, isDrag, drawGrid, fillCells, drawSelectArea])
+
+    requestIdRef.current = requestAnimationFrame(drawTick)
+  }
+
+  React.useEffect(() => {
+    requestIdRef.current = requestAnimationFrame(drawTick)
+    return () => {
+      if (!requestIdRef.current) {
+        return
+      }
+      cancelAnimationFrame(requestIdRef.current)
+    }
+  })
 
   if (!container || !imgSize) {
     return null
