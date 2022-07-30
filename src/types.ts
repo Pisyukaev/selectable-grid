@@ -45,12 +45,14 @@ export interface Point {
 }
 
 export interface CtxStyles {
-  strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
-  lineDashOffset?: CanvasPathDrawingStyles['lineDashOffset']
-  fillStyle?: CanvasFillStrokeStyles['fillStyle']
-  lineDash?: number[]
+  strokeStyle: CanvasFillStrokeStyles['strokeStyle']
+  lineDashOffset: CanvasPathDrawingStyles['lineDashOffset']
+  fillStyle: CanvasFillStrokeStyles['fillStyle']
+  lineDash: number[]
 }
 
-export type GridStyles = Omit<CtxStyles, 'fillStyle'>
-export type AreaStyles = Omit<CtxStyles, 'lineDashOffset'>
-export type CellsStyles = Omit<CtxStyles, 'lineDashOffset' | 'lineDash'>
+export type CtxStylesOptional = Partial<CtxStyles>
+
+export type GridStyles = Omit<CtxStylesOptional, 'fillStyle'>
+export type AreaStyles = Omit<CtxStylesOptional, 'lineDashOffset'>
+export type CellsStyles = Omit<CtxStylesOptional, 'lineDashOffset' | 'lineDash'>

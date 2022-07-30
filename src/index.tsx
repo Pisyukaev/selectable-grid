@@ -12,12 +12,20 @@ import {
   AreaInfo,
   AreaStyles,
   CellsStyles,
-  GridStyles
+  GridStyles,
+  CtxStyles
 } from './types'
 import styles from './styles.module.css'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const NOOP = () => {}
+
+const DEFAULT_CTX_STYLES: CtxStyles = {
+  strokeStyle: 'black',
+  lineDashOffset: 0,
+  lineDash: [0, 0],
+  fillStyle: 'black'
+}
 
 const GRID_STYLES = {
   strokeStyle: 'blue',
@@ -80,6 +88,17 @@ export const SelectableGrid = ({
     paddings
   })
 
+  const updateCtxStyles = (
+    ctx: CanvasRenderingContext2D,
+    ctxStyles: CtxStyles = DEFAULT_CTX_STYLES
+  ) => {
+    const { fillStyle, lineDash, lineDashOffset, strokeStyle } = ctxStyles
+    ctx.fillStyle = fillStyle
+    ctx.setLineDash(lineDash)
+    ctx.lineDashOffset = lineDashOffset
+    ctx.strokeStyle = strokeStyle
+  }
+
   const drawGrid = React.useCallback(() => {
     if (!canvasRef.current) {
       return
@@ -96,9 +115,7 @@ export const SelectableGrid = ({
 
     ctx.clearRect(0, 0, width, height)
 
-    ctx.strokeStyle = gridStyles.strokeStyle || GRID_STYLES.strokeStyle
-    ctx.setLineDash(gridStyles.lineDash || GRID_STYLES.lineDash)
-    ctx.lineDashOffset = gridStyles.lineDashOffset || GRID_STYLES.lineDashOffset
+    updateCtxStyles(ctx, { ...DEFAULT_CTX_STYLES, ...gridStyles })
 
     ctx.beginPath()
 
@@ -126,10 +143,7 @@ export const SelectableGrid = ({
       return
     }
 
-    ctx.strokeStyle =
-      selectAreaStyles.strokeStyle || SELECT_AREA_STYLES.strokeStyle
-    ctx.fillStyle = selectAreaStyles.fillStyle || SELECT_AREA_STYLES.fillStyle
-    ctx.setLineDash(selectAreaStyles.lineDash || SELECT_AREA_STYLES.lineDash)
+    updateCtxStyles(ctx, { ...DEFAULT_CTX_STYLES, ...selectAreaStyles })
 
     const { x, y, w, h } = area
 
@@ -152,8 +166,7 @@ export const SelectableGrid = ({
       return
     }
 
-    ctx.strokeStyle = cellsStyles.strokeStyle || CELLS_STYLES.strokeStyle
-    ctx.fillStyle = cellsStyles.fillStyle || CELLS_STYLES.fillStyle
+    updateCtxStyles(ctx, { ...DEFAULT_CTX_STYLES, ...cellsStyles })
 
     const { x, y, w, h } = area
     const { top, left, right, bottom } = paddings
