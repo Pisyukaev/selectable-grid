@@ -50,3 +50,7 @@ export interface CtxStyles {
   fillStyle?: CanvasFillStrokeStyles['fillStyle']
   lineDash?: number[]
 }
+
+export type GridStyles = Omit<CtxStyles, 'fillStyle'>
+export type AreaStyles = Omit<CtxStyles, 'lineDashOffset'>
+export type CellsStyles = Omit<CtxStyles, 'lineDashOffset' | 'lineDash'>

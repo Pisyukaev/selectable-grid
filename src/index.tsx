@@ -6,7 +6,14 @@ import {
   useMouseCallbacks,
   useResponsiveSize
 } from './hooks'
-import { Size, Point, AreaInfo, CtxStyles } from './types'
+import {
+  Size,
+  Point,
+  AreaInfo,
+  AreaStyles,
+  CellsStyles,
+  GridStyles
+} from './types'
 import styles from './styles.module.css'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -35,20 +42,9 @@ interface Props {
   onMouseDown?: (e: React.MouseEvent, startDownPosition: Point) => void
   onMouseMove?: (e: React.MouseEvent, areaInfo: AreaInfo) => void
   onMouseUp?: (e: React.MouseEvent, areaInfo: AreaInfo) => void
-  gridStyles?: {
-    strokeStyle?: CtxStyles['strokeStyle']
-    lineDashOffset?: CtxStyles['lineDashOffset']
-    lineDash?: CtxStyles['lineDash']
-  }
-  selectAreaStyles?: {
-    strokeStyle?: CtxStyles['strokeStyle']
-    fillStyle?: CtxStyles['fillStyle']
-    lineDash?: CtxStyles['lineDash']
-  }
-  cellsStyles?: {
-    strokeStyle?: CtxStyles['strokeStyle']
-    fillStyle?: CtxStyles['fillStyle']
-  }
+  gridStyles?: GridStyles
+  selectAreaStyles?: AreaStyles
+  cellsStyles?: CellsStyles
 }
 
 const CELL_OFFSET = 5
