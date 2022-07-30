@@ -25,7 +25,9 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "@types/react": ">=16.8.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
