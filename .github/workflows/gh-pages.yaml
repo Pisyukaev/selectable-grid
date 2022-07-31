@@ -3,7 +3,8 @@ name: github-pages
 on:
   push:
     branches:
-      - master
+      - main
+      - v1
 
 jobs:
   cache-and-install:
