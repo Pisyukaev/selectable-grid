@@ -3,7 +3,7 @@ import { SelectableGrid } from 'selectable-grid'
 import type { Point, AreaInfo, Size } from 'selectable-grid'
 import 'selectable-grid/css'
 
-export function App() {
+export const App = () => {
   const containerRef = React.useRef<HTMLDivElement>(null)
   const imgRef = React.useRef<HTMLImageElement>(null)
   const [imgSize, setImgSize] = React.useState<Size | undefined>(undefined)
