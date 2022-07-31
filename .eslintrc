@@ -1,11 +1,10 @@
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
   "extends": [
+    "prettier",
     "standard",
-    "standard-react",
     "plugin:prettier/recommended",
-    "prettier/standard",
-    "prettier/react",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
@@ -21,14 +20,20 @@
       "legacyDecorators": true,
       "jsx": true
     },
-    "project": "./tsconfig.json"
+    "project": [
+      "./tsconfig.json",
+      "./website/tsconfig.json"
+    ]
   },
   "settings": {
     "react": {
       "version": "16"
     }
   },
-  "plugins": ["react-hooks", "@typescript-eslint"],
+  "plugins": [
+    "react-hooks",
+    "@typescript-eslint"
+  ],
   "rules": {
     "space-before-function-paren": 0,
     "react/prop-types": 0,
@@ -37,9 +42,13 @@
     "react/no-unused-prop-types": 0,
     "import/export": 0,
     "react-hooks/exhaustive-deps": "warn",
-    "semi": ["warn", "never"],
+    "semi": [
+      "warn",
+      "never"
+    ],
     "@typescript-eslint/member-delimiter-style": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
     "no-unused-vars": "warn"
   }
 }

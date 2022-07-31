@@ -39,8 +39,8 @@ Example for image in the div element
 import React, { useRef, useState } from 'react'
 
 import { SelectableGrid } from 'selectable-grid'
-import 'selectable-grid/dist/index.css'
-import { Point, AreaInfo, Size } from '../../dist/types'
+import type { Point, AreaInfo, Size } from 'selectable-grid'
+import 'selectable-grid/css'
 
 const App = () => {
   const containerRef = useRef<HTMLDivElement>(null)

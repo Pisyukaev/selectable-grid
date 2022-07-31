@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 import { getPointFromCell } from './helpers'
 import {
@@ -17,6 +17,8 @@ import {
   CtxStyles
 } from './types'
 import styles from './styles.module.css'
+
+export type { Point, AreaInfo, Size }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const NOOP = () => {}

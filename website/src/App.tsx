@@ -1,13 +1,12 @@
-import React, { useRef, useState } from 'react'
-
+import React from 'react'
 import { SelectableGrid } from 'selectable-grid'
-import 'selectable-grid/dist/index.css'
-import { Point, AreaInfo, Size } from '../../dist/types'
+import type { Point, AreaInfo, Size } from 'selectable-grid'
+import 'selectable-grid/css'
 
-const App = () => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const imgRef = useRef<HTMLImageElement>(null)
-  const [imgSize, setImgSize] = useState<Size | undefined>(undefined)
+export const App = () => {
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const imgRef = React.useRef<HTMLImageElement>(null)
+  const [imgSize, setImgSize] = React.useState<Size | undefined>(undefined)
 
   const handleLoad = ({
     currentTarget: { naturalWidth, naturalHeight }
@@ -48,5 +47,3 @@ const App = () => {
     </div>
   )
 }
-
-export default App
