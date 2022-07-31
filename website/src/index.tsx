@@ -5,8 +5,4 @@ import './index.css'
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = document.querySelector('#root')!
-createRoot(root).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+createRoot(root).render(<App />)
