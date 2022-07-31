@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { App } from './App'
 import './index.css'
 
-const root = document.getElementById('root')!
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const root = document.querySelector('#root')!
 createRoot(root).render(
   <React.StrictMode>
     <App />
