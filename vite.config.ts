@@ -11,7 +11,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.tsx'),
-      name: 'TWallpaper',
+      name: 'selectable-grid',
       formats: [
         'es',
         'cjs',
