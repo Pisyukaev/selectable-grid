@@ -1,0 +1,9 @@
+node_modules
+dist
+.turbo
+.github
+*.yaml
+*.yml
+*.json
+*.md
+.*ignore
