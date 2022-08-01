@@ -30,8 +30,8 @@ export const useCanvasPaddings = ({
     const paddingX = width - cellCountX * cellSize
     const paddingY = height - cellCountY * cellSize
 
-    const paddingTop = paddingY / 2 - 0.5
-    const paddingLeft = paddingX / 2 - 0.5
+    const paddingTop = paddingY / 2
+    const paddingLeft = paddingX / 2
     const paddingRight = paddingLeft
     const paddingBottom = paddingTop
 

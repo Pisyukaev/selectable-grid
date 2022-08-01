@@ -11,10 +11,10 @@ export const useCanvasStyles = ({
   canvasSize: CanvasSize
 }) => {
   const [canvasStyles, setCanvasStyles] = React.useState({
-    top: '0',
-    left: '0',
-    right: '0',
-    bottom: '0'
+    top: '0%',
+    left: '0%',
+    right: '0%',
+    bottom: '0%'
   })
 
   React.useEffect(() => {
@@ -25,6 +25,10 @@ export const useCanvasStyles = ({
     const { offsetWidth: containerWidth, offsetHeight: containerHeight } =
       container
     const { width: canvasWidth, height: canvasHeight } = canvasSize
+
+    if (containerWidth === 0 || containerHeight === 0) {
+      return
+    }
 
     const isOffsetX = canvasWidth <= containerWidth
     const isOffsetY = canvasHeight <= containerHeight
