@@ -36,6 +36,12 @@ export const useResponsiveSize = ({
       resizeObserverRef.current = new ResizeObserver(handleResize)
       resizeObserverRef.current.observe(container)
     }
+
+    return () => {
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.disconnect()
+      }
+    }
   }, [container, handleResize])
 
   const canvasSize = useCanvasResolution({ containerSize: size, imgSize })
