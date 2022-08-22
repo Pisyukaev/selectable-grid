@@ -10,14 +10,12 @@ export const useCanvasResolution = ({
   containerSize?: Size
   imgSize?: Size
 }) => {
-  const [canvasSize, setCanvasSize] = React.useState<CanvasSize>({
-    width: 0,
-    height: 0
-  })
-
-  React.useEffect(() => {
+  const canvasSize: CanvasSize = React.useMemo(() => {
     if (!containerSize || !imgSize) {
-      return
+      return {
+        width: 0,
+        height: 0
+      }
     }
 
     const { width, height } = containerSize
@@ -28,12 +26,10 @@ export const useCanvasResolution = ({
 
     const isWidest = newImgHeight <= height
 
-    const size = {
+    return {
       width: isWidest ? width : newImgWidth,
       height: isWidest ? newImgHeight : height
     }
-
-    setCanvasSize(size)
   }, [containerSize, imgSize])
 
   return canvasSize

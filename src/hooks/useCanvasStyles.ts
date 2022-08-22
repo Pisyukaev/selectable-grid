@@ -10,16 +10,14 @@ export const useCanvasStyles = ({
   container: HTMLDivElement | null
   canvasSize: CanvasSize
 }) => {
-  const [canvasStyles, setCanvasStyles] = React.useState({
-    top: '0%',
-    left: '0%',
-    right: '0%',
-    bottom: '0%'
-  })
-
-  React.useEffect(() => {
+  const canvasStyles = React.useMemo(() => {
     if (!container || !canvasSize.width || !canvasSize.height) {
-      return
+      return {
+        top: '0%',
+        left: '0%',
+        right: '0%',
+        bottom: '0%'
+      }
     }
 
     const { offsetWidth: containerWidth, offsetHeight: containerHeight } =
@@ -36,14 +34,12 @@ export const useCanvasStyles = ({
     const offsetX = isOffsetX ? (containerWidth - canvasWidth) / 2 : 0
     const offsetY = isOffsetY ? (containerHeight - canvasHeight) / 2 : 0
 
-    const styles = {
+    return {
       top: `${(offsetY / containerHeight) * 100}%`,
       left: `${(offsetX / containerWidth) * 100}%`,
       right: `${(offsetX / containerWidth) * 100}%`,
       bottom: `${(offsetY / containerHeight) * 100}%`
     }
-
-    setCanvasStyles(styles)
   }, [container, canvasSize])
 
   return canvasStyles
