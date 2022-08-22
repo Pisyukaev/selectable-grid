@@ -34,39 +34,32 @@ export const useMouseCallbacks = ({
     w: 0,
     h: 0
   })
-  const [areaInPx, setAreaInPx] = React.useState<AreaInPx>({
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
-  })
 
-  const [areaInPercent, setAreaInPercent] = React.useState<AreaInPercent>({
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
-  })
-
-  // calculate selected area in px and percent
-  React.useEffect(() => {
+  // calculate selected area in px
+  const areaInPx: AreaInPx = React.useMemo(() => {
     const { x, y, w, h } = area
     const { left: pLeft, top: pTop } = paddings
-    const { width, height } = canvasSize
 
     const left = getPointFromCell(x, pLeft, cellSize)
     const top = getPointFromCell(y, pTop, cellSize)
     const right = getPointFromCell(x + w, pLeft, cellSize) + cellSize
     const bottom = getPointFromCell(y + h, pTop, cellSize) + cellSize
 
-    setAreaInPx({ top, left, right, bottom })
-    setAreaInPercent({
+    return { top, left, right, bottom }
+  }, [area, paddings, canvasSize, cellSize])
+
+  // calculate selected area in percent
+  const areaInPercent: AreaInPercent = React.useMemo(() => {
+    const { width, height } = canvasSize
+    const { top, left, right, bottom } = areaInPx
+
+    return {
       top: top / height,
       left: left / width,
       right: right / width,
       bottom: bottom / height
-    })
-  }, [area, paddings, canvasSize, cellSize])
+    }
+  }, [canvasSize, areaInPx])
 
   // reset selectable area when canvas changing own sizes
   React.useEffect(() => {
