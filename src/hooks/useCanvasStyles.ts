@@ -25,7 +25,12 @@ export const useCanvasStyles = ({
     const { width: canvasWidth, height: canvasHeight } = canvasSize
 
     if (containerWidth === 0 || containerHeight === 0) {
-      return
+      return {
+        top: '0%',
+        left: '0%',
+        right: '0%',
+        bottom: '0%'
+      }
     }
 
     const isOffsetX = canvasWidth <= containerWidth
