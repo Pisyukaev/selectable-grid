@@ -7,9 +7,11 @@ const init = () => {
     return
   }
 
-  new SelectableGrid({
-    imageContainer: img as HTMLImageElement,
-    cellCount: 5
+  img.addEventListener('load', () => {
+    new SelectableGrid({
+      imageContainer: img as HTMLImageElement,
+      cellCount: 15
+    })
   })
 }
 
