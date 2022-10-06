@@ -2,3 +2,5 @@
 **/dist
 *.tgz
 *.log
+.turbo
+build/**

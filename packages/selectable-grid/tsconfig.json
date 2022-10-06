@@ -3,10 +3,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "noUncheckedIndexedAccess": false,
-    "jsx": "preserve",
-    "outDir": "dist"
+    "outDir": "dist",
+    "target": "ES2015"
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src"]
 }
