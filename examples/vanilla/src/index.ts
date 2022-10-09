@@ -1,7 +1,7 @@
 import SelectableGrid from 'selectable-grid'
 
 const init = () => {
-  const img = document.getElementById('img')
+  const img = document.querySelector<HTMLImageElement>('img')
 
   if (!img) {
     return
@@ -9,7 +9,7 @@ const init = () => {
 
   img.addEventListener('load', () => {
     new SelectableGrid({
-      imageContainer: img as HTMLImageElement,
+      imageContainer: img,
       cellCount: 15
     })
   })
