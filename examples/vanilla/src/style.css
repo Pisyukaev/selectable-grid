@@ -7,4 +7,10 @@
 
 .img-container {
   position: relative;
+  resize: both;
+  overflow: scroll;
+}
+
+#img {
+  width: 100%;
 }
