@@ -12,6 +12,7 @@ export class SelectableGrid {
   #handleUp: ({ offsetX, offsetY }: MouseEvent) => void
   #beginPoint: { x: number; y: number } | null
   #area: Area | null
+  #observer: ResizeObserver | null
 
   constructor(options: Options) {
     this.#options = options
@@ -50,8 +51,10 @@ export class SelectableGrid {
     this.#canvas = document.createElement('canvas')
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.#ctx = this.#canvas.getContext('2d')!
+    this.#setCanvasStyles()
 
-    this.#init()
+    this.#observer = new ResizeObserver(() => this.#init())
+    this.#observer.observe(this.#options.imageContainer)
   }
 
   #setCanvasStyles() {
@@ -61,12 +64,19 @@ export class SelectableGrid {
   }
 
   #subscribe() {
+    // if (this.#observer !== null) {
+    //   this.#observer.observe(this.#options.imageContainer)
+    // }
+
     this.#canvas.addEventListener('mousedown', this.#handleDown)
     this.#canvas.addEventListener('mousemove', this.#handleMove)
     this.#canvas.addEventListener('mouseup', this.#handleUp)
   }
 
   #unsubscribe() {
+    if (this.#observer !== null) {
+      this.#observer.unobserve(this.#options.imageContainer)
+    }
     this.#canvas.removeEventListener('mousedown', this.#handleDown)
     this.#canvas.removeEventListener('mousemove', this.#handleMove)
     this.#canvas.removeEventListener('mouseup', this.#handleUp)
@@ -162,7 +172,7 @@ export class SelectableGrid {
   }
 
   #init() {
-    this.#setCanvasStyles()
+    this.#clear()
     this.#calculateCellSize()
     this.#renderCanvas()
     this.#draw()
@@ -179,11 +189,16 @@ export class SelectableGrid {
     requestAnimationFrame(this.#draw.bind(this))
   }
 
-  setOptions(newOptions: Partial<Options>) {
-    this.#options = { ...this.#options, ...newOptions }
+  #clear() {
     this.#area = null
     this.#beginPoint = null
+    this.#isDown = false
+  }
 
+  setOptions(newOptions: Partial<Options>) {
+    this.#options = { ...this.#options, ...newOptions }
+
+    this.#clear()
     this.#unsubscribe()
 
     this.#init()
