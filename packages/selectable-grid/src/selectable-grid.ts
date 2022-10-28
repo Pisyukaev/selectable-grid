@@ -13,6 +13,7 @@ export class SelectableGrid {
   #beginPoint: { x: number; y: number } | null
   #area: Area | null
   #observer: ResizeObserver | null
+  #requestAnimationId: number | null
 
   constructor(options: Options) {
     this.#options = options
@@ -21,6 +22,7 @@ export class SelectableGrid {
     this.#isDown = false
     this.#beginPoint = null
     this.#area = null
+    this.#requestAnimationId = null
 
     // handlers
     this.#handleDown = ({ offsetX, offsetY }: MouseEvent) => {
@@ -175,6 +177,11 @@ export class SelectableGrid {
     this.#clear()
     this.#calculateCellSize()
     this.#renderCanvas()
+
+    if (this.#requestAnimationId) {
+      cancelAnimationFrame(this.#requestAnimationId)
+    }
+
     this.#draw()
   }
 
@@ -186,7 +193,7 @@ export class SelectableGrid {
     this.#drawGrid()
     this.#drawArea()
 
-    requestAnimationFrame(this.#draw.bind(this))
+    this.#requestAnimationId = requestAnimationFrame(this.#draw.bind(this))
   }
 
   #clear() {
