@@ -14,7 +14,7 @@
     "dist/index.umd.js",
     "dist/index.d.ts",
     "dist/types.d.ts",
-    "dist/fireworks.d.ts"
+    "dist/selectable-grid.d.ts"
   ],
   "exports": {
     ".": {
@@ -33,13 +33,12 @@
     "animation"
   ],
   "author": {
-    "name": "Vitalij Ryndin",
-    "email": "stalker-52@mail.ru",
-    "url": "https://crashmax.ru"
+    "name": "Vitalij Zakutnij",
+    "email": "stalker-52@mail.ru"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/crashmax-dev/fireworks-js/issues"
+    "url": "https://github.com/pisyukaev/selectable-grid/issues"
   },
   "scripts": {
     "dev": "vite build --watch",
