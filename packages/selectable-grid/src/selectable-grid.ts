@@ -1,4 +1,4 @@
-import { Area, Options } from './types'
+import { Area, Options, Point } from './types'
 
 export class SelectableGrid {
   #canvas: HTMLCanvasElement
@@ -7,7 +7,7 @@ export class SelectableGrid {
   #cellWidth: number
   #cellHeight: number
   #isDown: boolean
-  #beginPoint: { x: number; y: number } | null
+  #beginPoint: Point | null
   #area: Area | null
   #observer: ResizeObserver | null
   #requestAnimationId: number | null
