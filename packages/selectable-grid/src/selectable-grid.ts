@@ -31,14 +31,22 @@ export class SelectableGrid {
   }
 
   // handlers
-  #handleDown = ({ offsetX, offsetY }: MouseEvent) => {
+  #handleDown = (event: MouseEvent) => {
+    const { offsetX, offsetY } = event
+    const { mouseDown } = this.#options
     this.#isDown = true
 
     this.#beginPoint = { x: offsetX, y: offsetY }
     this.#area = { ...this.#beginPoint, w: 0, h: 0 }
+
+    if (mouseDown) {
+      mouseDown(this.#area, event)
+    }
   }
 
-  #handleMove = ({ offsetX, offsetY }: MouseEvent) => {
+  #handleMove = (event: MouseEvent) => {
+    const { offsetX, offsetY } = event
+    const { mouseMove } = this.#options
     if (!this.#isDown || !this.#beginPoint) {
       return
     }
@@ -51,11 +59,20 @@ export class SelectableGrid {
       w: Math.abs(offsetX - x),
       h: Math.abs(offsetY - y)
     }
+
+    if (mouseMove) {
+      mouseMove(this.#area, event)
+    }
   }
 
-  #handleUp = () => {
+  #handleUp = (event: MouseEvent) => {
+    const { mouseUp } = this.#options
     this.#isDown = false
     this.#beginPoint = null
+
+    if (mouseUp) {
+      mouseUp(this.#area, event)
+    }
   }
 
   #setCanvasStyles() {
