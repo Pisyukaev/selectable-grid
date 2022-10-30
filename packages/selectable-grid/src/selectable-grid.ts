@@ -7,9 +7,6 @@ export class SelectableGrid {
   #cellWidth: number
   #cellHeight: number
   #isDown: boolean
-  #handleDown: ({ offsetX, offsetY }: MouseEvent) => void
-  #handleMove: ({ offsetX, offsetY }: MouseEvent) => void
-  #handleUp: ({ offsetX, offsetY }: MouseEvent) => void
   #beginPoint: { x: number; y: number } | null
   #area: Area | null
   #observer: ResizeObserver | null
@@ -24,32 +21,6 @@ export class SelectableGrid {
     this.#area = null
     this.#requestAnimationId = null
 
-    // handlers
-    this.#handleDown = ({ offsetX, offsetY }: MouseEvent) => {
-      this.#isDown = true
-
-      this.#beginPoint = { x: offsetX, y: offsetY }
-      this.#area = { ...this.#beginPoint, w: 0, h: 0 }
-    }
-    this.#handleMove = ({ offsetX, offsetY }: MouseEvent) => {
-      if (!this.#isDown || !this.#beginPoint) {
-        return
-      }
-
-      const { x, y } = this.#beginPoint
-
-      this.#area = {
-        x: Math.min(offsetX, x),
-        y: Math.min(offsetY, y),
-        w: Math.abs(offsetX - x),
-        h: Math.abs(offsetY - y)
-      }
-    }
-    this.#handleUp = () => {
-      this.#isDown = false
-      this.#beginPoint = null
-    }
-
     this.#canvas = document.createElement('canvas')
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.#ctx = this.#canvas.getContext('2d')!
@@ -59,6 +30,34 @@ export class SelectableGrid {
     this.#observer.observe(this.#options.imageContainer)
   }
 
+  // handlers
+  #handleDown = ({ offsetX, offsetY }: MouseEvent) => {
+    this.#isDown = true
+
+    this.#beginPoint = { x: offsetX, y: offsetY }
+    this.#area = { ...this.#beginPoint, w: 0, h: 0 }
+  }
+
+  #handleMove = ({ offsetX, offsetY }: MouseEvent) => {
+    if (!this.#isDown || !this.#beginPoint) {
+      return
+    }
+
+    const { x, y } = this.#beginPoint
+
+    this.#area = {
+      x: Math.min(offsetX, x),
+      y: Math.min(offsetY, y),
+      w: Math.abs(offsetX - x),
+      h: Math.abs(offsetY - y)
+    }
+  }
+
+  #handleUp = () => {
+    this.#isDown = false
+    this.#beginPoint = null
+  }
+
   #setCanvasStyles() {
     this.#canvas.style.position = 'absolute'
     this.#canvas.style.top = '0'
@@ -66,19 +65,12 @@ export class SelectableGrid {
   }
 
   #subscribe() {
-    // if (this.#observer !== null) {
-    //   this.#observer.observe(this.#options.imageContainer)
-    // }
-
     this.#canvas.addEventListener('mousedown', this.#handleDown)
     this.#canvas.addEventListener('mousemove', this.#handleMove)
     this.#canvas.addEventListener('mouseup', this.#handleUp)
   }
 
   #unsubscribe() {
-    if (this.#observer !== null) {
-      this.#observer.unobserve(this.#options.imageContainer)
-    }
     this.#canvas.removeEventListener('mousedown', this.#handleDown)
     this.#canvas.removeEventListener('mousemove', this.#handleMove)
     this.#canvas.removeEventListener('mouseup', this.#handleUp)
