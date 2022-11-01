@@ -1,4 +1,7 @@
-import { Area, Options, Point } from './types'
+import { throttle } from './utils'
+import type { Area, Options, Point } from './types'
+
+const THROTTLE_MS = 10
 
 export class SelectableGrid {
   #canvas: HTMLCanvasElement
@@ -11,6 +14,7 @@ export class SelectableGrid {
   #area: Area | null
   #observer: ResizeObserver | null
   #requestAnimationId: number | null
+  throttledMouseMove: (area: Area, e: MouseEvent) => void
 
   constructor(options: Options) {
     this.#options = options
@@ -26,8 +30,18 @@ export class SelectableGrid {
     this.#ctx = this.#canvas.getContext('2d')!
     this.#setCanvasStyles()
 
+    this.#updateThrottledMouseMove()
+
     this.#observer = new ResizeObserver(() => this.#init())
     this.#observer.observe(this.#options.imageContainer)
+  }
+
+  #updateThrottledMouseMove() {
+    const { mouseMove } = this.#options
+
+    if (mouseMove) {
+      this.throttledMouseMove = throttle(mouseMove, THROTTLE_MS)
+    }
   }
 
   // handlers
@@ -61,7 +75,7 @@ export class SelectableGrid {
     }
 
     if (mouseMove) {
-      mouseMove(this.#area, event)
+      this.throttledMouseMove(this.#area, event)
     }
   }
 
@@ -216,6 +230,8 @@ export class SelectableGrid {
 
     this.#clear()
     this.#unsubscribe()
+
+    this.#updateThrottledMouseMove()
 
     this.#init()
   }
