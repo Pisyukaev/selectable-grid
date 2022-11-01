@@ -125,6 +125,12 @@ export class SelectableGrid {
   }
 
   #setCanvasStyles() {
+    const { canvasClassName } = this.#options
+
+    if (canvasClassName) {
+      this.#canvas.classList.add(canvasClassName)
+    }
+
     this.#canvas.style.position = 'absolute'
     this.#canvas.style.top = '0'
     this.#canvas.style.left = '0'
@@ -286,6 +292,7 @@ export class SelectableGrid {
     this.#unsubscribe()
 
     this.#updateThrottledMouseMove()
+    this.#setCanvasStyles()
 
     this.#init()
   }
