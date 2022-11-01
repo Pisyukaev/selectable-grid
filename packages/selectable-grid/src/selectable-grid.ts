@@ -1,7 +1,19 @@
 import { throttle } from './utils'
-import type { Area, Options, Point } from './types'
+import type { Area, FillStrokeStyles, Options, Point } from './types'
 
 const THROTTLE_MS = 10
+
+const GRID_STYLES: FillStrokeStyles = {
+  strokeStyle: '#000000'
+}
+
+const CELLS_STYLES: FillStrokeStyles = {
+  fillStyle: '#47fffc80'
+}
+
+const AREA_STYLES: FillStrokeStyles = {
+  fillStyle: '#ff634780'
+}
 
 export class SelectableGrid {
   #canvas: HTMLCanvasElement
@@ -34,6 +46,16 @@ export class SelectableGrid {
 
     this.#observer = new ResizeObserver(() => this.#init())
     this.#observer.observe(this.#options.imageContainer)
+  }
+
+  #updateStyles(styles: FillStrokeStyles) {
+    if (!styles) {
+      return
+    }
+
+    for (const style in styles) {
+      this.#ctx[style] = styles[style]
+    }
   }
 
   #updateThrottledMouseMove() {
@@ -124,6 +146,8 @@ export class SelectableGrid {
       return
     }
 
+    this.#updateStyles({ ...GRID_STYLES, ...this.#options.gridStyles })
+
     this.#ctx.beginPath()
 
     for (let x = 0; x <= clientWidth; x += this.#cellWidth) {
@@ -144,7 +168,7 @@ export class SelectableGrid {
       return
     }
 
-    this.#ctx.fillStyle = '#ff634780'
+    this.#updateStyles({ ...AREA_STYLES, ...this.#options.areaStyles })
 
     const { x, y, w, h } = this.#area
 
@@ -157,7 +181,7 @@ export class SelectableGrid {
       return
     }
 
-    this.#ctx.fillStyle = '#47fffc80'
+    this.#updateStyles({ ...CELLS_STYLES, ...this.#options.cellsStyles })
 
     const { x, y, w, h } = this.#area
 
