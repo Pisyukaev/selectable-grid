@@ -12,6 +12,7 @@ export interface Options {
   gridStyles?: Omit<FillStrokeStyles, 'fillStyle'>
   areaStyles?: FillStrokeStyles
   isArea?: boolean
+  keepArea?: boolean
   isCells?: boolean
   isGrid?: boolean
 }
