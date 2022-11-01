@@ -20,7 +20,8 @@ const OPTIONS: Options = {
   imageContainer: null,
   isArea: true,
   isCells: true,
-  isGrid: true
+  isGrid: true,
+  keepArea: false
 }
 
 export class SelectableGrid {
@@ -110,9 +111,13 @@ export class SelectableGrid {
   }
 
   #handleUp = (event: MouseEvent) => {
-    const { mouseUp } = this.#options
+    const { mouseUp, keepArea } = this.#options
+
     this.#isDown = false
-    this.#beginPoint = null
+
+    if (!keepArea) {
+      this.#beginPoint = null
+    }
 
     if (mouseUp) {
       mouseUp(this.#area, event)
