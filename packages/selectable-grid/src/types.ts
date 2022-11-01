@@ -15,6 +15,7 @@ export interface Options {
   keepArea?: boolean
   isCells?: boolean
   isGrid?: boolean
+  canvasClassName?: string
 }
 
 export interface Point {
