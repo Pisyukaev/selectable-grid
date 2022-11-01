@@ -11,6 +11,9 @@ export interface Options {
   cellsStyles?: Omit<FillStrokeStyles, 'strokeStyle'>
   gridStyles?: Omit<FillStrokeStyles, 'fillStyle'>
   areaStyles?: FillStrokeStyles
+  isArea?: boolean
+  isCells?: boolean
+  isGrid?: boolean
 }
 
 export interface Point {
