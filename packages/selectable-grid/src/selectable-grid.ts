@@ -15,6 +15,14 @@ const AREA_STYLES: FillStrokeStyles = {
   fillStyle: '#ff634780'
 }
 
+const OPTIONS: Options = {
+  cellCount: 30,
+  imageContainer: null,
+  isArea: true,
+  isCells: true,
+  isGrid: true
+}
+
 export class SelectableGrid {
   #canvas: HTMLCanvasElement
   #options: Options
@@ -29,7 +37,7 @@ export class SelectableGrid {
   throttledMouseMove: (area: Area, e: MouseEvent) => void
 
   constructor(options: Options) {
-    this.#options = options
+    this.#options = { ...OPTIONS, ...options }
     this.#cellWidth = 0
     this.#cellHeight = 0
     this.#isDown = false
@@ -140,7 +148,12 @@ export class SelectableGrid {
   }
 
   #drawGrid() {
+    const { isGrid } = this.#options
     const { clientWidth, clientHeight } = this.#canvas
+
+    if (!isGrid) {
+      return
+    }
 
     if (!clientWidth || !clientHeight) {
       return
@@ -164,6 +177,12 @@ export class SelectableGrid {
   }
 
   #drawArea() {
+    const { isArea } = this.#options
+
+    if (!isArea) {
+      return
+    }
+
     if (!this.#area || !this.#beginPoint) {
       return
     }
@@ -177,6 +196,12 @@ export class SelectableGrid {
   }
 
   #drawCells() {
+    const { isCells } = this.#options
+
+    if (!isCells) {
+      return
+    }
+
     if (!this.#area) {
       return
     }
@@ -250,7 +275,7 @@ export class SelectableGrid {
   }
 
   setOptions(newOptions: Partial<Options>) {
-    this.#options = { ...this.#options, ...newOptions }
+    this.#options = { ...OPTIONS, ...this.#options, ...newOptions }
 
     this.#clear()
     this.#unsubscribe()
