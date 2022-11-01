@@ -1,9 +1,16 @@
+export interface FillStrokeStyles {
+  fillStyle?: CanvasFillStrokeStyles['fillStyle']
+  strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
+}
 export interface Options {
   imageContainer: HTMLImageElement | HTMLVideoElement
   cellCount: number
   mouseMove?: (area: Area, e: MouseEvent) => void
   mouseDown?: (point: Point, e: MouseEvent) => void
   mouseUp?: (area: Area, e: MouseEvent) => void
+  cellsStyles?: Omit<FillStrokeStyles, 'strokeStyle'>
+  gridStyles?: Omit<FillStrokeStyles, 'fillStyle'>
+  areaStyles?: FillStrokeStyles
 }
 
 export interface Point {
