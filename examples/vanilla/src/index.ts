@@ -19,6 +19,16 @@ const init = () => {
       },
       mouseUp: () => {
         console.log('up')
+      },
+      gridStyles: {
+        strokeStyle: '#000'
+      },
+      // cellsStyles: {
+      //   fillStyle: '#ff0000'
+      // }
+      areaStyles: {
+        // fillStyle: '#ff0000',
+        strokeStyle: '#0000ff'
       }
     })
   })
