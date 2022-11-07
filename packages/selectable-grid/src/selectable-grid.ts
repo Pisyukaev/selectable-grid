@@ -33,9 +33,10 @@ export class SelectableGrid {
   #isDown: boolean
   #beginPoint: Point | null
   #area: Area | null
+  #selectArea: Area | null
   #observer: ResizeObserver | null
   #requestAnimationId: number | null
-  throttledMouseMove: (area: Area, e: MouseEvent) => void
+  throttledMouseMove: (area: Area, selectArea: Area, e: MouseEvent) => void
 
   constructor(options: Options) {
     this.#options = { ...OPTIONS, ...options }
@@ -44,6 +45,7 @@ export class SelectableGrid {
     this.#isDown = false
     this.#beginPoint = null
     this.#area = null
+    this.#selectArea = null
     this.#requestAnimationId = null
 
     this.#canvas = document.createElement('canvas')
@@ -82,10 +84,10 @@ export class SelectableGrid {
     this.#isDown = true
 
     this.#beginPoint = { x: offsetX, y: offsetY }
-    this.#area = { ...this.#beginPoint, w: 0, h: 0 }
+    this.#selectArea = { ...this.#beginPoint, w: 0, h: 0 }
 
     if (mouseDown) {
-      mouseDown(this.#area, event)
+      mouseDown(this.#beginPoint, event)
     }
   }
 
@@ -98,7 +100,7 @@ export class SelectableGrid {
 
     const { x, y } = this.#beginPoint
 
-    this.#area = {
+    this.#selectArea = {
       x: Math.min(offsetX, x),
       y: Math.min(offsetY, y),
       w: Math.abs(offsetX - x),
@@ -106,7 +108,7 @@ export class SelectableGrid {
     }
 
     if (mouseMove) {
-      this.throttledMouseMove(this.#area, event)
+      this.throttledMouseMove(this.#area, this.#selectArea, event)
     }
   }
 
@@ -120,7 +122,7 @@ export class SelectableGrid {
     }
 
     if (mouseUp) {
-      mouseUp(this.#area, event)
+      mouseUp(this.#area, this.#selectArea, event)
     }
   }
 
@@ -194,13 +196,13 @@ export class SelectableGrid {
       return
     }
 
-    if (!this.#area || !this.#beginPoint) {
+    if (!this.#selectArea || !this.#beginPoint) {
       return
     }
 
     this.#updateStyles({ ...AREA_STYLES, ...this.#options.areaStyles })
 
-    const { x, y, w, h } = this.#area
+    const { x, y, w, h } = this.#selectArea
 
     this.#ctx.strokeRect(x, y, w, h)
     this.#ctx.fillRect(x, y, w, h)
@@ -213,13 +215,13 @@ export class SelectableGrid {
       return
     }
 
-    if (!this.#area) {
+    if (!this.#selectArea) {
       return
     }
 
     this.#updateStyles({ ...CELLS_STYLES, ...this.#options.cellsStyles })
 
-    const { x, y, w, h } = this.#area
+    const { x, y, w, h } = this.#selectArea
 
     const startX = Math.floor(x / this.#cellWidth)
     const endX = Math.ceil((x + w) / this.#cellWidth)
@@ -228,6 +230,19 @@ export class SelectableGrid {
 
     const countX = endX - startX
     const countY = endY - startY
+
+    const areaX =
+      Math.floor((startX * this.#cellWidth) / this.#cellWidth) * this.#cellWidth
+    const areaY =
+      Math.floor((startY * this.#cellHeight) / this.#cellHeight) *
+      this.#cellHeight
+
+    this.#area = {
+      x: areaX,
+      y: areaY,
+      w: areaX + (countX || 1) * this.#cellWidth,
+      h: areaY + (countY || 1) * this.#cellHeight
+    }
 
     for (let cellX = 0; cellX < countX; cellX += 1) {
       for (let cellY = 0; cellY < countY; cellY += 1) {
@@ -281,6 +296,7 @@ export class SelectableGrid {
 
   #clear() {
     this.#area = null
+    this.#selectArea = null
     this.#beginPoint = null
     this.#isDown = false
   }
