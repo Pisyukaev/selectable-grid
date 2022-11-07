@@ -1,4 +1,28 @@
-import { Area, Options } from './types'
+import { throttle } from './utils'
+import type { Area, FillStrokeStyles, Options, Point } from './types'
+
+const THROTTLE_MS = 10
+
+const GRID_STYLES: FillStrokeStyles = {
+  strokeStyle: '#000000'
+}
+
+const CELLS_STYLES: FillStrokeStyles = {
+  fillStyle: '#47fffc80'
+}
+
+const AREA_STYLES: FillStrokeStyles = {
+  fillStyle: '#ff634780'
+}
+
+const OPTIONS: Options = {
+  cellCount: 30,
+  imageContainer: null,
+  isArea: true,
+  isCells: true,
+  isGrid: true,
+  keepArea: false
+}
 
 export class SelectableGrid {
   #canvas: HTMLCanvasElement
@@ -7,78 +31,120 @@ export class SelectableGrid {
   #cellWidth: number
   #cellHeight: number
   #isDown: boolean
-  #handleDown: ({ offsetX, offsetY }: MouseEvent) => void
-  #handleMove: ({ offsetX, offsetY }: MouseEvent) => void
-  #handleUp: ({ offsetX, offsetY }: MouseEvent) => void
-  #beginPoint: { x: number; y: number } | null
+  #beginPoint: Point | null
   #area: Area | null
+  #selectArea: Area | null
   #observer: ResizeObserver | null
   #requestAnimationId: number | null
+  #throttledMouseMove: (area: Area, selectArea: Area, e: MouseEvent) => void
 
   constructor(options: Options) {
-    this.#options = options
+    this.#options = { ...OPTIONS, ...options }
     this.#cellWidth = 0
     this.#cellHeight = 0
     this.#isDown = false
     this.#beginPoint = null
     this.#area = null
+    this.#selectArea = null
     this.#requestAnimationId = null
-
-    // handlers
-    this.#handleDown = ({ offsetX, offsetY }: MouseEvent) => {
-      this.#isDown = true
-
-      this.#beginPoint = { x: offsetX, y: offsetY }
-      this.#area = { ...this.#beginPoint, w: 0, h: 0 }
-    }
-    this.#handleMove = ({ offsetX, offsetY }: MouseEvent) => {
-      if (!this.#isDown || !this.#beginPoint) {
-        return
-      }
-
-      const { x, y } = this.#beginPoint
-
-      this.#area = {
-        x: Math.min(offsetX, x),
-        y: Math.min(offsetY, y),
-        w: Math.abs(offsetX - x),
-        h: Math.abs(offsetY - y)
-      }
-    }
-    this.#handleUp = () => {
-      this.#isDown = false
-      this.#beginPoint = null
-    }
 
     this.#canvas = document.createElement('canvas')
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.#ctx = this.#canvas.getContext('2d')!
     this.#setCanvasStyles()
 
+    this.#updateThrottledMouseMove()
+
     this.#observer = new ResizeObserver(() => this.#init())
     this.#observer.observe(this.#options.imageContainer)
   }
 
+  #updateStyles(styles: FillStrokeStyles) {
+    if (!styles) {
+      return
+    }
+
+    for (const style in styles) {
+      this.#ctx[style] = styles[style]
+    }
+  }
+
+  #updateThrottledMouseMove() {
+    const { mouseMove } = this.#options
+
+    if (mouseMove) {
+      this.#throttledMouseMove = throttle(mouseMove, THROTTLE_MS)
+    }
+  }
+
+  // handlers
+  #handleDown = (event: MouseEvent) => {
+    const { offsetX, offsetY } = event
+    const { mouseDown } = this.#options
+    this.#isDown = true
+
+    this.#beginPoint = { x: offsetX, y: offsetY }
+    this.#selectArea = { ...this.#beginPoint, w: 0, h: 0 }
+
+    if (mouseDown) {
+      mouseDown(this.#beginPoint, event)
+    }
+  }
+
+  #handleMove = (event: MouseEvent) => {
+    const { offsetX, offsetY } = event
+    const { mouseMove } = this.#options
+    if (!this.#isDown || !this.#beginPoint) {
+      return
+    }
+
+    const { x, y } = this.#beginPoint
+
+    this.#selectArea = {
+      x: Math.min(offsetX, x),
+      y: Math.min(offsetY, y),
+      w: Math.abs(offsetX - x),
+      h: Math.abs(offsetY - y)
+    }
+
+    if (mouseMove) {
+      this.#throttledMouseMove(this.#area, this.#selectArea, event)
+    }
+  }
+
+  #handleUp = (event: MouseEvent) => {
+    const { mouseUp, keepArea } = this.#options
+
+    this.#isDown = false
+
+    if (!keepArea) {
+      this.#beginPoint = null
+    }
+
+    if (mouseUp) {
+      mouseUp(this.#area, this.#selectArea, event)
+    }
+  }
+
   #setCanvasStyles() {
+    const { canvasClassName } = this.#options
+
+    if (canvasClassName) {
+      this.#canvas.classList.add(canvasClassName)
+    }
+
     this.#canvas.style.position = 'absolute'
     this.#canvas.style.top = '0'
     this.#canvas.style.left = '0'
   }
 
   #subscribe() {
-    // if (this.#observer !== null) {
-    //   this.#observer.observe(this.#options.imageContainer)
-    // }
-
     this.#canvas.addEventListener('mousedown', this.#handleDown)
     this.#canvas.addEventListener('mousemove', this.#handleMove)
     this.#canvas.addEventListener('mouseup', this.#handleUp)
   }
 
   #unsubscribe() {
-    if (this.#observer !== null) {
-      this.#observer.unobserve(this.#options.imageContainer)
-    }
     this.#canvas.removeEventListener('mousedown', this.#handleDown)
     this.#canvas.removeEventListener('mousemove', this.#handleMove)
     this.#canvas.removeEventListener('mouseup', this.#handleUp)
@@ -95,11 +161,18 @@ export class SelectableGrid {
   }
 
   #drawGrid() {
+    const { isGrid } = this.#options
     const { clientWidth, clientHeight } = this.#canvas
+
+    if (!isGrid) {
+      return
+    }
 
     if (!clientWidth || !clientHeight) {
       return
     }
+
+    this.#updateStyles({ ...GRID_STYLES, ...this.#options.gridStyles })
 
     this.#ctx.beginPath()
 
@@ -117,26 +190,38 @@ export class SelectableGrid {
   }
 
   #drawArea() {
-    if (!this.#area || !this.#beginPoint) {
+    const { isArea } = this.#options
+
+    if (!isArea) {
       return
     }
 
-    this.#ctx.fillStyle = '#ff634780'
+    if (!this.#selectArea || !this.#beginPoint) {
+      return
+    }
 
-    const { x, y, w, h } = this.#area
+    this.#updateStyles({ ...AREA_STYLES, ...this.#options.areaStyles })
+
+    const { x, y, w, h } = this.#selectArea
 
     this.#ctx.strokeRect(x, y, w, h)
     this.#ctx.fillRect(x, y, w, h)
   }
 
   #drawCells() {
-    if (!this.#area) {
+    const { isCells } = this.#options
+
+    if (!isCells) {
       return
     }
 
-    this.#ctx.fillStyle = '#47fffc80'
+    if (!this.#selectArea) {
+      return
+    }
 
-    const { x, y, w, h } = this.#area
+    this.#updateStyles({ ...CELLS_STYLES, ...this.#options.cellsStyles })
+
+    const { x, y, w, h } = this.#selectArea
 
     const startX = Math.floor(x / this.#cellWidth)
     const endX = Math.ceil((x + w) / this.#cellWidth)
@@ -145,6 +230,19 @@ export class SelectableGrid {
 
     const countX = endX - startX
     const countY = endY - startY
+
+    const areaX =
+      Math.floor((startX * this.#cellWidth) / this.#cellWidth) * this.#cellWidth
+    const areaY =
+      Math.floor((startY * this.#cellHeight) / this.#cellHeight) *
+      this.#cellHeight
+
+    this.#area = {
+      x: areaX,
+      y: areaY,
+      w: areaX + (countX || 1) * this.#cellWidth,
+      h: areaY + (countY || 1) * this.#cellHeight
+    }
 
     for (let cellX = 0; cellX < countX; cellX += 1) {
       for (let cellY = 0; cellY < countY; cellY += 1) {
@@ -198,15 +296,19 @@ export class SelectableGrid {
 
   #clear() {
     this.#area = null
+    this.#selectArea = null
     this.#beginPoint = null
     this.#isDown = false
   }
 
   setOptions(newOptions: Partial<Options>) {
-    this.#options = { ...this.#options, ...newOptions }
+    this.#options = { ...OPTIONS, ...this.#options, ...newOptions }
 
     this.#clear()
     this.#unsubscribe()
+
+    this.#updateThrottledMouseMove()
+    this.#setCanvasStyles()
 
     this.#init()
   }

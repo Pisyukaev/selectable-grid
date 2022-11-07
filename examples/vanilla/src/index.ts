@@ -10,7 +10,26 @@ const init = () => {
   img.addEventListener('load', () => {
     new SelectableGrid({
       imageContainer: img,
-      cellCount: 15
+      cellCount: 15,
+      mouseDown: () => {
+        console.log('down')
+      },
+      mouseMove: () => {
+        console.log('move')
+      },
+      mouseUp: () => {
+        console.log('up')
+      },
+      gridStyles: {
+        strokeStyle: '#000'
+      },
+      // cellsStyles: {
+      //   fillStyle: '#ff0000'
+      // }
+      areaStyles: {
+        // fillStyle: '#ff0000',
+        strokeStyle: '#0000ff'
+      }
     })
   })
 }
