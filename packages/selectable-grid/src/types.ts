@@ -5,9 +5,9 @@ export interface FillStrokeStyles {
 export interface Options {
   imageContainer: HTMLImageElement | HTMLVideoElement
   cellCount: number
-  mouseMove?: (area: Area, e: MouseEvent) => void
+  mouseMove?: (area: Area, selectArea: Area, e: MouseEvent) => void
   mouseDown?: (point: Point, e: MouseEvent) => void
-  mouseUp?: (area: Area, e: MouseEvent) => void
+  mouseUp?: (area: Area, selectArea: Area, e: MouseEvent) => void
   cellsStyles?: Omit<FillStrokeStyles, 'strokeStyle'>
   gridStyles?: Omit<FillStrokeStyles, 'fillStyle'>
   areaStyles?: FillStrokeStyles
