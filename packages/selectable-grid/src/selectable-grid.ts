@@ -231,32 +231,15 @@ export class SelectableGrid {
     const countX = endX - startX
     const countY = endY - startY
 
-    const areaX =
-      Math.floor((startX * this.#cellWidth) / this.#cellWidth) * this.#cellWidth
-    const areaY =
-      Math.floor((startY * this.#cellHeight) / this.#cellHeight) *
-      this.#cellHeight
-
     this.#area = {
-      x: areaX,
-      y: areaY,
-      w: areaX + (countX || 1) * this.#cellWidth,
-      h: areaY + (countY || 1) * this.#cellHeight
+      x: startX * this.#cellWidth,
+      y: startY * this.#cellHeight,
+      w: (countX || 1) * this.#cellWidth,
+      h: (countY || 1) * this.#cellHeight
     }
 
-    for (let cellX = 0; cellX < countX; cellX += 1) {
-      for (let cellY = 0; cellY < countY; cellY += 1) {
-        const xCell =
-          Math.floor((x + cellX * this.#cellWidth) / this.#cellWidth) *
-          this.#cellWidth
-        const yCell =
-          Math.floor((y + cellY * this.#cellHeight) / this.#cellHeight) *
-          this.#cellHeight
-
-        this.#ctx.clearRect(xCell, yCell, this.#cellWidth, this.#cellHeight)
-        this.#ctx.fillRect(xCell, yCell, this.#cellWidth, this.#cellHeight)
-      }
-    }
+    this.#ctx.clearRect(this.#area.x, this.#area.y, this.#area.w, this.#area.h)
+    this.#ctx.fillRect(this.#area.x, this.#area.y, this.#area.w, this.#area.h)
   }
 
   #renderCanvas() {
