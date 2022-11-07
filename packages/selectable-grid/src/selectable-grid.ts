@@ -56,7 +56,7 @@ export class SelectableGrid {
     this.#updateThrottledMouseMove()
 
     this.#observer = new ResizeObserver(() => this.#init())
-    this.#observer.observe(this.#options.imageContainer)
+    this.#init()
   }
 
   #updateStyles(styles: FillStrokeStyles) {
@@ -139,12 +139,14 @@ export class SelectableGrid {
   }
 
   #subscribe() {
+    this.#observer.observe(this.#options.imageContainer)
     this.#canvas.addEventListener('mousedown', this.#handleDown)
     this.#canvas.addEventListener('mousemove', this.#handleMove)
     this.#canvas.addEventListener('mouseup', this.#handleUp)
   }
 
   #unsubscribe() {
+    this.#observer.unobserve(this.#options.imageContainer)
     this.#canvas.removeEventListener('mousedown', this.#handleDown)
     this.#canvas.removeEventListener('mousemove', this.#handleMove)
     this.#canvas.removeEventListener('mouseup', this.#handleUp)
