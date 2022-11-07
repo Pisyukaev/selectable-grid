@@ -24,7 +24,7 @@ export function throttle<T extends (...args: any[]) => ReturnType<T>>(
     if (!isThrottle) {
       isThrottle = true
       setTimeout(() => (isThrottle = false), ms)
-      lastResult = fn(args)
+      lastResult = fn(...args)
     }
 
     return lastResult
