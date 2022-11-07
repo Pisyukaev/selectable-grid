@@ -36,7 +36,7 @@ export class SelectableGrid {
   #selectArea: Area | null
   #observer: ResizeObserver | null
   #requestAnimationId: number | null
-  throttledMouseMove: (area: Area, selectArea: Area, e: MouseEvent) => void
+  #throttledMouseMove: (area: Area, selectArea: Area, e: MouseEvent) => void
 
   constructor(options: Options) {
     this.#options = { ...OPTIONS, ...options }
@@ -73,7 +73,7 @@ export class SelectableGrid {
     const { mouseMove } = this.#options
 
     if (mouseMove) {
-      this.throttledMouseMove = throttle(mouseMove, THROTTLE_MS)
+      this.#throttledMouseMove = throttle(mouseMove, THROTTLE_MS)
     }
   }
 
@@ -108,7 +108,7 @@ export class SelectableGrid {
     }
 
     if (mouseMove) {
-      this.throttledMouseMove(this.#area, this.#selectArea, event)
+      this.#throttledMouseMove(this.#area, this.#selectArea, event)
     }
   }
 
