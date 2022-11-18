@@ -176,6 +176,7 @@ export class SelectableGrid {
 
     this.#updateStyles({ ...GRID_STYLES, ...this.#options.gridStyles })
 
+    this.#ctx.lineWidth = 2
     this.#ctx.beginPath()
 
     for (let x = 0; x <= clientWidth; x += this.#cellWidth) {
