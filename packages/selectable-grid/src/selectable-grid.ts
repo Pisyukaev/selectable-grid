@@ -176,14 +176,17 @@ export class SelectableGrid {
 
     this.#updateStyles({ ...GRID_STYLES, ...this.#options.gridStyles })
 
+    this.#ctx.lineWidth = 2
     this.#ctx.beginPath()
 
-    for (let x = 0; x <= clientWidth; x += this.#cellWidth) {
+    this.#ctx.strokeRect(1, 1, clientWidth - 2, clientHeight - 2)
+
+    for (let x = this.#cellWidth; x <= clientWidth; x += this.#cellWidth) {
       this.#ctx.moveTo(x, 0)
       this.#ctx.lineTo(x, clientHeight)
     }
 
-    for (let y = 0; y <= clientHeight; y += this.#cellHeight) {
+    for (let y = this.#cellHeight; y < clientHeight; y += this.#cellHeight) {
       this.#ctx.moveTo(0, y)
       this.#ctx.lineTo(clientWidth, y)
     }
