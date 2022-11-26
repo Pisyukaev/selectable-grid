@@ -8,7 +8,7 @@ const init = () => {
   }
 
   img.addEventListener('load', () => {
-    new SelectableGrid({
+    const sg = new SelectableGrid({
       imageContainer: img,
       cellCount: 15,
       mouseDown: () => {
