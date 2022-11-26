@@ -1,5 +1,5 @@
 import { SelectableGrid } from './selectable-grid'
-import { Area, Options } from './types'
+import { Area, Options, FillStrokeStyles, Point } from './types'
 
-export type { Area, Options }
+export type { Area, Options, FillStrokeStyles, Point }
 export default SelectableGrid
