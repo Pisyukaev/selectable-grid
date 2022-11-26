@@ -279,7 +279,7 @@ export class SelectableGrid {
     this.#drawGrid()
     this.#drawArea()
 
-    this.#requestAnimationId = requestAnimationFrame(this.#draw.bind(this))
+    this.#requestAnimationId = requestAnimationFrame(() => this.#draw())
   }
 
   #clear() {
