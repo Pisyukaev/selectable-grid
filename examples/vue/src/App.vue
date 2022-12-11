@@ -16,8 +16,6 @@ const imgRef = ref<HTMLImageElement>();
   </div>
   <SelectableGrid
     v-if="imgRef"
-    :image-container="imgRef"
-    :cell-count="15"
     :options="{
       imageContainer: imgRef,
       cellCount: 15,
