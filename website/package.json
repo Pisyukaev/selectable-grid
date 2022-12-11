@@ -1,21 +1,21 @@
 {
-  "name": "example-react",
-  "version": "2.0.0",
-  "description": "",
-  "main": "index.tsx",
+  "name": "website",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@selectable-grid/react": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^2.2.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "vite": "3.2.5"
   }
 }

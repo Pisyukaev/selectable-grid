@@ -1,24 +1,12 @@
-import React from 'react'
-import { SelectableGrid } from 'selectable-grid'
-import type { Point, AreaInfo, Size } from 'selectable-grid'
+import { useRef, Fragment, useState } from 'react'
+import SelectableGrid from '@selectable-grid/react'
 
 export const App = () => {
-  const containerRef = React.useRef<HTMLDivElement>(null)
-  const imgRef = React.useRef<HTMLImageElement>(null)
-  const [imgSize, setImgSize] = React.useState<Size | undefined>(undefined)
-
-  const handleLoad = ({
-    currentTarget: { naturalWidth, naturalHeight }
-  }: React.SyntheticEvent<HTMLImageElement>) => {
-    setImgSize({
-      width: naturalWidth,
-      height: naturalHeight,
-      aspect: naturalWidth / naturalHeight
-    })
-  }
+  const [isLoad, setIsLoad] = useState(false)
+  const imgRef = useRef<HTMLImageElement>(null)
 
   return (
-    <React.Fragment>
+    <Fragment>
       <h1 className='title'>Selectable Grid</h1>
       <a
         href='https://github.com/Pisyukaev/selectable-grid'
@@ -42,7 +30,7 @@ export const App = () => {
           ></path>
         </svg>
       </a>
-      <div ref={containerRef} className='selectable-grid'>
+      <div className='selectable-grid'>
         <img
           width='512'
           height='512'
@@ -50,26 +38,23 @@ export const App = () => {
           ref={imgRef}
           src='./patrik.png'
           alt=''
-          onLoad={handleLoad}
+          onLoad={() => setIsLoad(true)}
         />
         <SelectableGrid
           gridStyles={{ strokeStyle: 'black' }}
-          container={containerRef.current}
-          imgSize={imgSize}
-          onMouseDown={(e: React.MouseEvent, downPosition: Point) => {
-            console.log('event => ', e)
-            console.log('downPosition => ', downPosition)
+          cellCount={20}
+          imageContainer={imgRef.current}
+          mouseDown={(point) => {
+            console.log('mouseDown:', { point })
           }}
-          onMouseMove={(e: React.MouseEvent, areaInfo: AreaInfo) => {
-            console.log('event => ', e)
-            console.log('🚀 ~ areaInfo', areaInfo)
+          mouseMove={(area, selectArea) => {
+            console.log('mouseMove:', { area, selectArea })
           }}
-          onMouseUp={(e: React.MouseEvent, areaInfo: AreaInfo) => {
-            console.log('event => ', e)
-            console.log('🚀 ~ areaInfo', areaInfo)
+          mouseUp={(area, selectArea) => {
+            console.log('mouseUp', { area, selectArea })
           }}
         />
       </div>
-    </React.Fragment>
+    </Fragment>
   )
 }
