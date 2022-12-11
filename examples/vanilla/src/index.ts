@@ -8,7 +8,8 @@ const init = () => {
   }
 
   img.addEventListener('load', () => {
-    const sg = new SelectableGrid({
+    // eslint-disable-next-line no-new
+    new SelectableGrid({
       imageContainer: img,
       cellCount: 15,
       mouseDown: () => {

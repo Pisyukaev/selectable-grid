@@ -9,7 +9,7 @@ export default defineConfig({
     target: 'esnext',
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'Selectable-grid',
+      name: 'selectable-grid',
       formats: ['es', 'cjs', 'umd'],
       fileName: (format) => `index.${format}.js`
     },

@@ -1,5 +1,5 @@
 {
-  "name": "react",
+  "name": "example-react",
   "version": "2.0.0",
   "description": "",
   "main": "index.tsx",
@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@selectable-grid/react": "workspace:^2.0.0",
+    "@selectable-grid/react": "workspace:*",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^2.2.0",
