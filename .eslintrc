@@ -20,7 +20,11 @@
       "legacyDecorators": true,
       "jsx": true
     },
-    "project": ["./packages/*/tsconfig.json", "./examples/*/tsconfig.json"]
+    "project": [
+      "./packages/*/tsconfig.json",
+      "./examples/*/tsconfig.json",
+      "./website/tsconfig.json"
+    ]
   },
   "settings": {
     "react": {
