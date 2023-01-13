@@ -43,7 +43,10 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
-    "preview": "vite preview",
     "prepublishOnly": "pnpm build"
+  },
+  "devDependencies": {
+    "vite": "4.0.4",
+    "vite-plugin-dts": "1.6.6"
   }
 }

@@ -12,6 +12,7 @@
     "selectable-grid": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "^4.6.4"
+    "typescript": "4.9.4",
+    "vite": "4.0.4"
   }
 }
