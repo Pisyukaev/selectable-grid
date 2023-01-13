@@ -1,7 +1,20 @@
 export interface FillStrokeStyles {
-  fillStyle?: CanvasFillStrokeStyles['fillStyle']
-  strokeStyle?: CanvasFillStrokeStyles['strokeStyle']
+  fillStyle?: CanvasRenderingContext2D['fillStyle']
+  strokeStyle?: CanvasRenderingContext2D['strokeStyle']
 }
+
+export interface Point {
+  x: number
+  y: number
+}
+
+export interface Area {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
 export interface Options {
   imageContainer: HTMLImageElement | HTMLVideoElement
   cellCount: number
@@ -16,15 +29,4 @@ export interface Options {
   isCells?: boolean
   isGrid?: boolean
   canvasClassName?: string
-}
-
-export interface Point {
-  x: number
-  y: number
-}
-export interface Area {
-  x: number
-  y: number
-  w: number
-  h: number
 }
