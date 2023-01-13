@@ -5,10 +5,7 @@
     "esModuleInterop": true,
     "noUncheckedIndexedAccess": false,
     "outDir": "dist",
-    "target": "ES2015",
-    "types": [
-        "vite/client"
-      ]
+    "target": "ES2015"
   },
   "include": ["src"]
 }
