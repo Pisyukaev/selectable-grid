@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import SelectableGrid from "@selectable-grid/vue";
+import { ref } from 'vue'
+import SelectableGrid from '@selectable-grid/vue'
+import type { SelectableGridProps } from '@selectable-grid/vue'
 
-const imgRef = ref<HTMLImageElement>();
+const imgSrc =
+  'https://avatars.mds.yandex.net/get-mpic/5219318/img_id3258925543469117996.jpeg/orig'
+
+const options = ref<SelectableGridProps>({
+  type: 'img',
+  cellCount: 15,
+  containerProps: {
+    id: 'img',
+    src: imgSrc,
+    width: 500
+  }
+})
 </script>
 
 <template>
   <div class="image-container">
-    <img
-      ref="imgRef"
-      id="img"
-      src="https://avatars.mds.yandex.net/get-mpic/5219318/img_id3258925543469117996.jpeg/orig"
-      alt=""
-    />
+    <SelectableGrid :options="options" />
   </div>
-  <SelectableGrid
-    v-if="imgRef"
-    :options="{
-      imageContainer: imgRef,
-      cellCount: 15,
-    }"
-  />
 </template>
 
 <style scoped>
