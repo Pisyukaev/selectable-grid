@@ -1,21 +1,57 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, toRefs } from 'vue'
 import SelectableGrid from 'selectable-grid'
 import type { Options } from 'selectable-grid'
-import type { PropType } from 'vue'
+import type { ImgHTMLAttributes, VideoHTMLAttributes } from 'vue'
 
-const props = defineProps({
+export interface SelectableGridImgProps
+  extends Omit<Options, 'imageContainer'> {
+  type: 'img'
+  containerProps: ImgHTMLAttributes
+}
+
+export interface SelectableGridVideoProps
+  extends Omit<Options, 'imageContainer'> {
+  type: 'video'
+  containerProps: VideoHTMLAttributes
+}
+
+export type SelectableGridProps =
+  | SelectableGridImgProps
+  | SelectableGridVideoProps
+
+const props = defineProps<{
+  options: SelectableGridProps
+}>()
+
+const {
   options: {
-    type: Object as PropType<Options>,
-    required: true
+    value: { type, containerProps, ...sgOptions }
   }
-})
+} = toRefs(props)
 
 const selectableGrid = ref<SelectableGrid>()
+const containerRef = ref<HTMLImageElement | HTMLVideoElement>()
 
 onMounted(() => {
-  selectableGrid.value = new SelectableGrid(props.options)
+  if (!containerRef.value) {
+    return
+  }
+
+  selectableGrid.value = new SelectableGrid({
+    ...sgOptions,
+    imageContainer: containerRef.value
+  })
 })
 
-watch(props, () => selectableGrid.value?.setOptions(props.options))
+watch(props, () =>
+  selectableGrid.value?.setOptions({
+    ...sgOptions,
+    imageContainer: containerRef.value
+  })
+)
 </script>
+
+<template>
+  <component :is="type" v-bind="containerProps" ref="containerRef" />
+</template>
