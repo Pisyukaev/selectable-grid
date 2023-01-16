@@ -1,10 +1,7 @@
-import { useRef, Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import SelectableGrid from '@selectable-grid/react'
 
 export const App = () => {
-  const [isLoad, setIsLoad] = useState(false)
-  const imgRef = useRef<HTMLImageElement>(null)
-
   return (
     <Fragment>
       <h1 className='title'>Selectable Grid</h1>
@@ -31,19 +28,16 @@ export const App = () => {
         </svg>
       </a>
       <div className='selectable-grid'>
-        <img
-          width='512'
-          height='512'
-          className='img'
-          ref={imgRef}
-          src='./patrik.png'
-          alt=''
-          onLoad={() => setIsLoad(true)}
-        />
         <SelectableGrid
           gridStyles={{ strokeStyle: 'black' }}
           cellCount={20}
-          imageContainer={imgRef.current}
+          type='img'
+          containerProps={{
+            src: './patrik.png',
+            className: 'img',
+            width: 512,
+            height: 512
+          }}
           mouseDown={(point) => {
             console.log('mouseDown:', { point })
           }}
