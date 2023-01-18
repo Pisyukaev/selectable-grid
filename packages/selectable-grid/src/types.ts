@@ -16,7 +16,7 @@ export interface Area {
 }
 
 export interface Options {
-  imageContainer: HTMLImageElement | HTMLVideoElement
+  container: HTMLImageElement | HTMLVideoElement
   cellCount: number
   mouseMove?: (area: Area, selectArea: Area, e: MouseEvent) => void
   mouseDown?: (point: Point, e: MouseEvent) => void

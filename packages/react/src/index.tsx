@@ -7,7 +7,7 @@ import type {
 } from 'react'
 import type { Options, Area, FillStrokeStyles, Point } from 'selectable-grid'
 
-interface SelectableGridImgProps extends Omit<Options, 'imageContainer'> {
+interface SelectableGridImgProps extends Omit<Options, 'container'> {
   type: 'img'
   containerProps: DetailedHTMLProps<
     ImgHTMLAttributes<HTMLImageElement>,
@@ -15,7 +15,7 @@ interface SelectableGridImgProps extends Omit<Options, 'imageContainer'> {
   >
 }
 
-interface SelectableGridVideoProps extends Omit<Options, 'imageContainer'> {
+interface SelectableGridVideoProps extends Omit<Options, 'container'> {
   type: 'video'
   containerProps: DetailedHTMLProps<
     VideoHTMLAttributes<HTMLVideoElement>,
@@ -36,7 +36,7 @@ const useSelectableGrid = (options: Options) => {
   )
 
   useEffect(() => {
-    if (!selectableGridRef.current && options.imageContainer) {
+    if (!selectableGridRef.current && options.container) {
       selectableGridRef.current = new SelectGrid(options)
     }
   }, [options])
@@ -66,7 +66,7 @@ const SelectableGrid = ({
 
     sgRef.current = new SelectGrid({
       ...props,
-      imageContainer: containerRef.current
+      container: containerRef.current
     })
   }
 
@@ -75,7 +75,7 @@ const SelectableGrid = ({
       return
     }
 
-    sgRef.current.setOptions({ ...props, imageContainer: containerRef.current })
+    sgRef.current.setOptions({ ...props, container: containerRef.current })
   }, [props])
 
   return React.createElement(type, {

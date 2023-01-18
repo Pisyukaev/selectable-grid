@@ -17,7 +17,7 @@ const AREA_STYLES: FillStrokeStyles = {
 
 const OPTIONS: Options = {
   cellCount: 30,
-  imageContainer: null,
+  container: null,
   isArea: true,
   isCells: true,
   isGrid: true,
@@ -139,14 +139,14 @@ export class SelectableGrid {
   }
 
   #subscribe() {
-    this.#observer.observe(this.#options.imageContainer)
+    this.#observer.observe(this.#options.container)
     this.#canvas.addEventListener('mousedown', this.#handleDown)
     this.#canvas.addEventListener('mousemove', this.#handleMove)
     this.#canvas.addEventListener('mouseup', this.#handleUp)
   }
 
   #unsubscribe() {
-    this.#observer.unobserve(this.#options.imageContainer)
+    this.#observer.unobserve(this.#options.container)
     this.#canvas.removeEventListener('mousedown', this.#handleDown)
     this.#canvas.removeEventListener('mousemove', this.#handleMove)
     this.#canvas.removeEventListener('mouseup', this.#handleUp)
@@ -154,7 +154,7 @@ export class SelectableGrid {
 
   #calculateCellSize() {
     const {
-      imageContainer: { clientHeight, clientWidth },
+      container: { clientHeight, clientWidth },
       cellCount
     } = this.#options
 
@@ -248,13 +248,13 @@ export class SelectableGrid {
   }
 
   #renderCanvas() {
-    const { imageContainer } = this.#options
-    const { clientHeight, clientWidth } = imageContainer
+    const { container } = this.#options
+    const { clientHeight, clientWidth } = container
 
     this.#canvas.width = clientWidth
     this.#canvas.height = clientHeight
 
-    imageContainer.parentElement?.append(this.#canvas)
+    container.parentElement?.append(this.#canvas)
 
     this.#subscribe()
   }
