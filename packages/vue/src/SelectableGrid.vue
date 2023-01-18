@@ -4,14 +4,12 @@ import SelectableGrid from 'selectable-grid'
 import type { Options } from 'selectable-grid'
 import type { ImgHTMLAttributes, VideoHTMLAttributes } from 'vue'
 
-export interface SelectableGridImgProps
-  extends Omit<Options, 'imageContainer'> {
+export interface SelectableGridImgProps extends Omit<Options, 'container'> {
   type: 'img'
   containerProps: ImgHTMLAttributes
 }
 
-export interface SelectableGridVideoProps
-  extends Omit<Options, 'imageContainer'> {
+export interface SelectableGridVideoProps extends Omit<Options, 'container'> {
   type: 'video'
   containerProps: VideoHTMLAttributes
 }
@@ -40,14 +38,14 @@ onMounted(() => {
 
   selectableGrid.value = new SelectableGrid({
     ...sgOptions,
-    imageContainer: containerRef.value
+    container: containerRef.value
   })
 })
 
 watch(props, () =>
   selectableGrid.value?.setOptions({
     ...sgOptions,
-    imageContainer: containerRef.value
+    container: containerRef.value
   })
 )
 </script>
