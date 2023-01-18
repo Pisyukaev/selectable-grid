@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": false,
+    "outDir": "dist",
+    "jsx": "preserve",
+    "target": "ES2015",
+    "types": ["vite/client"]
+  },
+  "include": ["src"]
+}

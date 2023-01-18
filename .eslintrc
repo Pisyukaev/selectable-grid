@@ -1,18 +1,18 @@
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
   "extends": [
+    "prettier",
     "standard",
-    "standard-react",
     "plugin:prettier/recommended",
-    "prettier/standard",
-    "prettier/react",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "eslint:recommended"
   ],
   "env": {
-    "node": true
+    "node": true,
+    "browser": true
   },
   "parserOptions": {
     "ecmaVersion": 2020,
@@ -20,7 +20,11 @@
       "legacyDecorators": true,
       "jsx": true
     },
-    "project": "./tsconfig.json"
+    "project": [
+      "./packages/*/tsconfig.json",
+      "./examples/*/tsconfig.json",
+      "./website/tsconfig.json"
+    ]
   },
   "settings": {
     "react": {
@@ -39,6 +43,7 @@
     "semi": ["warn", "never"],
     "@typescript-eslint/member-delimiter-style": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
     "no-unused-vars": "warn"
   }
 }

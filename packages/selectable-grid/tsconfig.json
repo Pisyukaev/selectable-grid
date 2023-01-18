@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": false,
+    "outDir": "dist",
+    "target": "ES2015"
+  },
+  "include": ["src"]
+}
