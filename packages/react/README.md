@@ -7,45 +7,28 @@ npm install --save @selectable-grid/react
 
 ## Usage example
 
-```html
-<script setup lang="ts">
-import { ref } from 'vue'
-import SelectableGrid from '@selectable-grid/vue'
-import type { SelectableGridProps } from '@selectable-grid/vue'
+```jsx
+import React from 'react'
+import SelectableGrid from '@selectable-grid/react'
 
-const imgSrc = 'image_link'
-
-const options = ref<SelectableGridProps>({
-  type: 'img',
-  cellCount: 15,
-  containerProps: {
-    id: 'img',
-    src: imgSrc,
-    width: 500
-  }
-})
-</script>
-
-<template>
-  <div class="image-container">
-    <SelectableGrid :options="options" />
-  </div>
-</template>
-
-<style scoped>
-#img {
-  height: 500px;
+const App = () => {
+  return (
+    <div style={{ position: 'relative' }}>
+      <SelectableGrid
+        cellCount={20}
+        type='img'
+        containerProps={{
+          src: 'spanch-bob.webp'
+        }}
+      />
+    </div>
+  )
 }
-</style>
+
+export default App
 ```
 
 ## Properties
-| Property | Required | Type | Description |
-|----------|----------|------|-------------|
-| `options*` | `true` | `object` | see down |
-
-## Properties of the `options*`
-
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
 | `type` | `true` | `'img'` \| `'video'` | name of html tag |

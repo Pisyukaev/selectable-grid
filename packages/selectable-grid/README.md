@@ -1,55 +1,38 @@
-# @selectable-grid/react
+# selectable-grid
 
 ## Install
 ```bash
-npm install --save @selectable-grid/react
+npm install --save selectable-grid
 ```
 
 ## Usage example
 
-```html
-<script setup lang="ts">
-import { ref } from 'vue'
-import SelectableGrid from '@selectable-grid/vue'
-import type { SelectableGridProps } from '@selectable-grid/vue'
+```js
+import SelectableGrid from 'selectable-grid'
 
-const imgSrc = 'image_link'
+const init = () => {
+  const img = document.querySelector('img')
 
-const options = ref<SelectableGridProps>({
-  type: 'img',
-  cellCount: 15,
-  containerProps: {
-    id: 'img',
-    src: imgSrc,
-    width: 500
+  if (!img) {
+    return
   }
-})
-</script>
 
-<template>
-  <div class="image-container">
-    <SelectableGrid :options="options" />
-  </div>
-</template>
-
-<style scoped>
-#img {
-  height: 500px;
+  img.addEventListener('load', () => {
+    new SelectableGrid({
+      container: img,
+      cellCount: 15,
+    })
+  })
 }
-</style>
+
+init()
+
 ```
 
 ## Properties
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
-| `options*` | `true` | `object` | see down |
-
-## Properties of the `options*`
-
-| Property | Required | Type | Description |
-|----------|----------|------|-------------|
-| `type` | `true` | `'img'` \| `'video'` | name of html tag |
-| `containerProps` | `true` | `object` | if prop `type` is equal `'img'` `containerProps` is HTML Attributes of the `<img />` tag, else prop `type` is equal `'video'` `containerProps` is HTML Attributes of the `<video />` |
+| `container` | `true` | `HTMLImageElement` \| `HTMLVideoElement` | `img` or `video` node |
 | `cellCount` | `true` | `number` | count of the cell in the grid |
 | `mouseMove` | `false` | `function(area: {x: number, y: number, w: number, h: number}, selectArea: {x: number, y: number, w: number, h: number}, e: MouseEvent){}` | handler of mouse move on the grid |
 | `mouseDown` | `false` | `(point: {x: number, y:number}, e: MouseEvent) => void` | handler of mouse down on the grid |
@@ -67,6 +50,6 @@ const options = ref<SelectableGridProps>({
 
 ## Another packages
 
-[selectable-grid](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/selectable-grid)
-
 [@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/react)
+
+[@selectable-grid/vue](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/vue)
