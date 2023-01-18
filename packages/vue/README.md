@@ -67,6 +67,6 @@ const options = ref<SelectableGridProps>({
 
 ## Another packages
 
-[selectable-grid](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/selectable-grid)
+[selectable-grid](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/selectable-grid)
 
-[@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/react)
+[@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/react)

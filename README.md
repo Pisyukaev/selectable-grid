@@ -25,9 +25,9 @@ A React component library that allows you to select the desired area within a co
 ## Packages
 | Package | Version | Description |
 |---------|--------|-------------|
-| [selectable-grid](https://github.com/Pisyukaev/selectable-grid/tree/v2) | [![NPM](https://img.shields.io/npm/v/selectable-grid.svg)](https://www.npmjs.com/package/selectable-grid) | Vanilla |
-| [@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/react) | [![NPM](https://img.shields.io/npm/v/selectable-grid.svg)](https://www.npmjs.com/package/@selectable-grid/react) | React |
-| [@selectable-grid/vue](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/vue) | [![NPM](https://img.shields.io/npm/v/selectable-grid.svg)](https://www.npmjs.com/package/@selectable-grid/vue) | Vue |
+| [selectable-grid](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/selectable-grid) | [![NPM](https://img.shields.io/npm/v/selectable-grid.svg)](https://www.npmjs.com/package/selectable-grid) | Vanilla |
+| [@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/react) | [![NPM](https://img.shields.io/npm/v/selectable-grid.svg)](https://www.npmjs.com/package/@selectable-grid/react) | React |
+| [@selectable-grid/vue](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/vue) | [![NPM](https://img.shields.io/npm/v/selectable-grid.svg)](https://www.npmjs.com/package/@selectable-grid/vue) | Vue |
 
 ## License
 
