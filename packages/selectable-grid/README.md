@@ -50,6 +50,6 @@ init()
 
 ## Another packages
 
-[@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/react)
+[@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/react)
 
-[@selectable-grid/vue](https://github.com/Pisyukaev/selectable-grid/tree/v2/packages/vue)
+[@selectable-grid/vue](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/vue)
