@@ -1,8 +1,9 @@
 # @selectable-grid/react
 
 ## Install
+
 ```bash
-npm install --save @selectable-grid/react
+npm install --save @selectable-grid/vue
 ```
 
 ## Usage example
@@ -40,6 +41,7 @@ const options = ref<SelectableGridProps>({
 ```
 
 ## Properties
+
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
 | `options*` | `true` | `object` | see down |

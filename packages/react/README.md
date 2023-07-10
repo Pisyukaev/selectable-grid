@@ -1,6 +1,7 @@
 # @selectable-grid/react
 
 ## Install
+
 ```bash
 npm install --save @selectable-grid/react
 ```
@@ -29,6 +30,7 @@ export default App
 ```
 
 ## Properties
+
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
 | `type` | `true` | `'img'` \| `'video'` | name of html tag |
@@ -52,4 +54,4 @@ export default App
 
 [selectable-grid](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/selectable-grid)
 
-[@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/react)
+[@selectable-grid/react](https://github.com/Pisyukaev/selectable-grid/tree/main/packages/vue)

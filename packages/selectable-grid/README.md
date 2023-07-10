@@ -1,6 +1,7 @@
 # selectable-grid
 
 ## Install
+
 ```bash
 npm install --save selectable-grid
 ```
@@ -30,6 +31,7 @@ init()
 ```
 
 ## Properties
+
 | Property | Required | Type | Description |
 |----------|----------|------|-------------|
 | `container` | `true` | `HTMLImageElement` \| `HTMLVideoElement` | `img` or `video` node |
