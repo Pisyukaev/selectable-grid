@@ -1,7 +1,11 @@
 import { Fragment } from 'react'
-import SelectableGrid from '@selectable-grid/react'
+import { useAboba } from '@selectable-grid/react/hooks/use-aboba'
+import { SelectableGrid } from '@selectable-grid/react'
 
 export const App = () => {
+  const { v, z } = useAboba()
+  console.log(v, z)
+
   return (
     <Fragment>
       <h1 className='title'>Selectable Grid</h1>

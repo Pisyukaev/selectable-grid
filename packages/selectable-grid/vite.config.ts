@@ -8,14 +8,16 @@ import dts from 'vite-plugin-dts'
 export default defineConfig({
   plugins: [dts({ insertTypesEntry: true })],
   build: {
+    target: 'esnext',
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'selectable-grid',
-      formats: ['es', 'cjs', 'umd'],
-      fileName: (format) => `index.${format}.js`
+      entry: {
+        index: resolve(__dirname, 'src/index.ts')
+      },
+      formats: ['es'],
     },
     rollupOptions: {
       output: {
+        // preserveModules: true,
         exports: 'named'
       }
     }

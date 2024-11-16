@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import SelectGrid from 'selectable-grid'
+import { SelectableGrid as SelectGrid } from 'selectable-grid'
 import type {
   DetailedHTMLProps,
   ImgHTMLAttributes,

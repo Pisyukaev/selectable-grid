@@ -8,14 +8,16 @@ export default defineConfig({
   build: {
     target: 'esnext',
     lib: {
-      entry: resolve(__dirname, 'src/index.tsx'),
-      name: 'SelectableGrid',
-      formats: ['es', 'cjs', 'umd'],
-      fileName: (format) => `index.${format}.js`
+      entry: {
+        index: resolve(__dirname, 'src/index.tsx'),
+        'hooks/use-aboba': resolve(__dirname, 'src/hooks/use-aboba.ts')
+      },
+      formats: ['es'],
     },
     rollupOptions: {
       external: ['react', 'selectable-grid'],
       output: {
+        preserveModules: true,
         exports: 'named',
         globals: {
           react: 'React',
